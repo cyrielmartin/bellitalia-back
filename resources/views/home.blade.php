@@ -22,6 +22,10 @@
             margin: 0;
         }
 
+        a {
+            text-decoration: none;
+        }
+
         .full-height {
             height: 100vh;
         }
@@ -59,6 +63,7 @@
             text-decoration: none;
             text-transform: uppercase;
         }
+
         #map {
             height: 100%;
         }
@@ -69,7 +74,7 @@
 <body>
     <div class="content">
         <div class="title m-b-md">
-            Bell'Italia
+            <a href="/">Bell'Italia</a>
         </div>
 
         <div class="links">
@@ -80,16 +85,19 @@
 
     <div id="map"></div>
     <script>
-      var map;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 41.890251, lng: 12.492373},
-          zoom: 6
-        });
-      }
+        var map;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {
+                    lat: 41.890251,
+                    lng: 12.492373
+                },
+                zoom: 6
+            });
+        }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKFLOdmMpMZg-6_CHbN9Gw5zsT-_l4kmU&callback=initMap"
-    async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKFLOdmMpMZg-6_CHbN9Gw5zsT-_l4kmU&callback=initMap" async defer></script>
 
 
 
@@ -97,4 +105,3 @@
 </body>
 
 </html>
-

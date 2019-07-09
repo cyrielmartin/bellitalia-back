@@ -22,6 +22,10 @@
             margin: 0;
         }
 
+        a {
+            text-decoration: none;
+        }
+
         .full-height {
             height: 100vh;
         }
@@ -70,7 +74,7 @@
 <body>
     <div class="content">
         <div class="title m-b-md">
-            Bell'Italia Admin
+            <a href="/admin">Bell'Italia Admin</a>
         </div>
 
         <div class="links">
