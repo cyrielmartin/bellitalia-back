@@ -79,7 +79,7 @@
 
         <div class="links">
             <a href="/">Home</a>
-            <a href="https://github.com/cyrielmartin/bellitalia">GitHub</a>
+            <a target="_blank" rel="noopener noreferrer" href="https://github.com/cyrielmartin/bellitalia">GitHub</a>
         </div>
     </div>
 </body>
