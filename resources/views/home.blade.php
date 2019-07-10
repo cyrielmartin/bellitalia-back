@@ -9,7 +9,7 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
     <!-- Styles -->
     <style>
         html,
@@ -64,12 +64,12 @@
             text-transform: uppercase;
         }
 
-        #map {
-            height: 100%;
+        #mapid {
+            height: 100vh;
+            width: 100%;
         }
     </style>
 </head>
-
 
 <body>
     <div class="content">
@@ -83,24 +83,28 @@
         </div>
     </div>
 
-    <div id="map"></div>
+
+    <div id="mapid"></div>
+
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+
     <script>
-        var map;
+        var roma = [41.890251, 12.492373];
 
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: {
-                    lat: 41.890251,
-                    lng: 12.492373
-                },
-                zoom: 6
-            });
-        }
+        // création de la carte
+        var mymap = L.map('mapid').setView([40.853294, 14.305573], 5.5);
+
+        // ajout du calque image
+        L.tileLayer('https://maps.heigit.org/openmapsurfer/tiles/roads/webmercator/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(mymap);
+
+        // ajout de marqueurs
+        var marker = L.marker(roma).addTo(mymap);
+
+        // affichage pop up
+        marker.bindPopup('<h3>Rome</h3><p>bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</p><a target="_blank" rel="noopener noreferrer" href="https://www.google.com/search?q=rome&source=lnms&tbm=isch&sa=X&ved=0ahUKEwicyfSu6qrjAhUEWxoKHaOsArYQ_AUIESgC&biw=1366&bih=665">Lien</a>');
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKFLOdmMpMZg-6_CHbN9Gw5zsT-_l4kmU&callback=initMap" async defer></script>
-
-
-
 
 </body>
 
