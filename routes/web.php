@@ -11,11 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
+// Route::get('/', function () {
+//     return view('home');
+// });
 
 Route::get('/admin', function() {
     return view('admin');
 });
 
+Route::resource('place', 'PlaceController');
+
+Route::get('/', 'PlaceController@index');

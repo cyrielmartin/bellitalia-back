@@ -82,14 +82,14 @@
             <a target="_blank" rel="noopener noreferrer" href="https://github.com/cyrielmartin/bellitalia">GitHub</a>
         </div>
     </div>
-
-
-    <div id="mapid"></div>
+@foreach ($places as $place)
+<div id="mapid"></div>
 
     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
 
     <script>
-        var roma = [41.890251, 12.492373];
+        var place = [{{$place->latitude}}, {{$place->longitude}}];
+        var popup = '<h3>{{$place->city}}, {{$place->region}}</h3><h4>{{$place->monument}}</h4><p>{{$place->description}}</p><p>Bell\'Italia n°{{$place->issue}}, {{ \Carbon\Carbon::parse($place->published)->format('F, Y') }}</p><a target="_blank" rel="noopener noreferrer" href="{{$place->link}}">Lien</a>';
 
         // création de la carte
         var mymap = L.map('mapid').setView([40.853294, 14.305573], 5.5);
@@ -100,12 +100,13 @@
         }).addTo(mymap);
 
         // ajout de marqueurs
-        var marker = L.marker(roma).addTo(mymap);
+        var marker = L.marker(place).addTo(mymap);
 
         // affichage pop up
-        marker.bindPopup('<h3>Rome</h3><p>bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</p><a target="_blank" rel="noopener noreferrer" href="https://www.google.com/search?q=rome&source=lnms&tbm=isch&sa=X&ved=0ahUKEwicyfSu6qrjAhUEWxoKHaOsArYQ_AUIESgC&biw=1366&bih=665">Lien</a>');
+        marker.bindPopup(popup);
     </script>
 
+@endforeach
 </body>
 
 </html>
