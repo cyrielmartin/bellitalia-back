@@ -16,9 +16,10 @@
 // });
 
 Route::get('/admin', function() {
-    return view('admin');
+    return view('admin.main');
 });
 
 Route::resource('place', 'PlaceController');
 
 Route::get('/', 'PlaceController@index');
+Route::get('/admin/create', 'PlaceController@create');

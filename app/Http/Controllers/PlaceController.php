@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Kris\LaravelFormBuilder\FormBuilder;
+use \App\Forms\PlaceForm;
+
+
 Use App\Place;
 
 class PlaceController extends Controller
@@ -16,7 +20,7 @@ class PlaceController extends Controller
   public function index()
   {
     $places = Place::all();
-    return view('home', compact('places'));
+    return view('home.main', compact('places'));
   }
 
   /**
@@ -24,9 +28,10 @@ class PlaceController extends Controller
    *
    * @return Response
    */
-  public function create()
+  public function create(FormBuilder $formBuilder)
   {
-
+    $form = $formBuilder->create(PlaceForm::class);
+    return view('admin.create', compact('form'));
   }
 
   /**
