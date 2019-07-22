@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('content')
+@section('map')
 
 <div id="mapid"></div>
 
-  
+
 
     <script>
 
