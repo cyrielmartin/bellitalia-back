@@ -1,6 +1,6 @@
 
 <div class="content">
-    <div class="title m-b-md">
+    <div class="title m-b-md main-title">
         <a href="/">Bell'Italia</a>
     </div>
 
