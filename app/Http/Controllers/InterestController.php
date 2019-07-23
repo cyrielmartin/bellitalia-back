@@ -1,10 +1,12 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Interest;
+use App\City;
 
-class PlaceController extends Controller 
+class InterestController extends Controller
 {
 
   /**
@@ -14,7 +16,9 @@ class PlaceController extends Controller
    */
   public function index()
   {
-    
+    $interests = Interest::all();
+    $cities = City::all();
+    return view('home.map', compact('interests', 'cities'));
   }
 
   /**
@@ -24,7 +28,7 @@ class PlaceController extends Controller
    */
   public function create()
   {
-    
+
   }
 
   /**
@@ -34,7 +38,7 @@ class PlaceController extends Controller
    */
   public function store(Request $request)
   {
-    
+
   }
 
   /**
@@ -45,7 +49,7 @@ class PlaceController extends Controller
    */
   public function show($id)
   {
-    
+
   }
 
   /**
@@ -56,7 +60,7 @@ class PlaceController extends Controller
    */
   public function edit($id)
   {
-    
+
   }
 
   /**
@@ -67,7 +71,7 @@ class PlaceController extends Controller
    */
   public function update($id)
   {
-    
+
   }
 
   /**
@@ -78,9 +82,9 @@ class PlaceController extends Controller
    */
   public function destroy($id)
   {
-    
+
   }
-  
+
 }
 
 ?>

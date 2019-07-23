@@ -17,14 +17,16 @@
   }).addTo(mymap);
 
   // pour chacun des lieux en BDD...
-  @foreach ($places as $place)
 
-  var place = [{{$place->latitude}}, {{$place->longitude}}];
-  var popup = '<h3>{{$place->city}}, {{$place->region}}</h3><h4>{{$place->monument}}</h4><p>{{$place->description}}</p><p>Bell\'Italia n°{{$place->issue}}, {{ \Carbon\Carbon::parse($place->published)->format('F, Y') }}</p><a target="_blank" rel="noopener noreferrer" href="{{$place->link}}">Lien</a>';
+  @foreach ($interests as $interest)
+
+  var interest = [{{$interest->latitude}}, {{$interest->longitude}}];
+  var popup = '<h3>{{$interest->city_id}}</h3><h4>{{$interest->name}}</h4><p>{{$interest->description}}</p><a target="_blank" rel="noopener noreferrer" href="{{$interest->link}}">Lien</a>';
+
 
 
   // ... ajout de marqueurs...
-  var marker = L.marker(place).addTo(mymap);
+  var marker = L.marker(interest).addTo(mymap);
 
   // ... et affichage pop up
   marker.bindPopup(popup);

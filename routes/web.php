@@ -14,12 +14,22 @@
 // Route::get('/', function () {
 //     return view('home');
 // });
+//
+// Route::get('/admin', function() {
+//     return view('admin.main');
+// });
 
-Route::get('/admin', function() {
-    return view('admin.main');
-});
+// Route::resource('place', 'PlaceController');
+//
+// Route::get('/', 'PlaceController@index');
+// Route::get('/admin/create', 'PlaceController@create');
 
-Route::resource('place', 'PlaceController');
 
-Route::get('/', 'PlaceController@index');
-Route::get('/admin/create', 'PlaceController@create');
+Route::resource('interest', 'InterestController');
+Route::get('/', 'InterestController@index');
+
+Route::resource('bellitalia', 'BellitaliaController');
+Route::resource('tag', 'TagController');
+Route::resource('interesttag', 'InterestTagController');
+Route::resource('city', 'CityController');
+Route::resource('region', 'RegionController');
