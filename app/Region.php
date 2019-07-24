@@ -19,7 +19,7 @@ class Region extends Model
 
     public function cities()
     {
-        return $this->hasMany('App\City', 'regions_id');
+        return $this->hasMany('App\City', 'region_id');
     }
 
 }

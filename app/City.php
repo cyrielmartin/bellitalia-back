@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class City extends Model 
+class City extends Model
 {
 
     protected $table = 'cities';
@@ -19,12 +19,12 @@ class City extends Model
 
     public function interests()
     {
-        return $this->hasMany('App\Interest', 'cities_id');
+        return $this->hasMany('App\Interest');
     }
 
-    public function regions()
+    public function region()
     {
-        return $this->belongsTo('App\Region', 'regions_id');
+        return $this->belongsTo('App\Region');
     }
 
 }

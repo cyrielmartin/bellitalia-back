@@ -17,9 +17,9 @@ class Interest extends Model
     protected $fillable = array('name', 'description', 'link', 'latitude', 'longitude', 'city_id', 'bellitalia_id');
     protected $visible = array('name', 'description', 'link', 'latitude', 'longitude', 'city_id', 'bellitalia_id');
 
-    public function bellitalias()
+    public function bellitalia()
     {
-        return $this->belongsTo('App\Bellitalia', 'bellitalias_id');
+        return $this->belongsTo('App\Bellitalia');
     }
 
     public function tags()
@@ -27,9 +27,9 @@ class Interest extends Model
         return $this->belongsToMany('App\Tag', 'interest_tag');
     }
 
-    public function cities()
+    public function city()
     {
-        return $this->belongsTo('App\City', 'cities_id');
+        return $this->belongsTo('App\City');
     }
 
 }

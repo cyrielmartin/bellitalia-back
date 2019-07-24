@@ -19,7 +19,7 @@ class Bellitalia extends Model
 
     public function interests()
     {
-        return $this->hasMany('App\Interest', 'bellitalias_id');
+        return $this->hasMany('App\Interest', 'bellitalia_id');
     }
 
 }
