@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Interest;
 use App\City;
+use Kris\LaravelFormBuilder\FormBuilder;
+use Kris\LaravelFormBuilder\FormBuilderTrait;
+use App\Forms\InterestForm;
 
 class InterestController extends Controller
 {
@@ -17,8 +20,7 @@ class InterestController extends Controller
   public function index()
   {
     $interests = Interest::all();
-    $cities = City::all();
-    return view('home.map', compact('interests', 'cities'));
+    return view('home.map', compact('interests'));
   }
 
   /**
@@ -26,9 +28,10 @@ class InterestController extends Controller
    *
    * @return Response
    */
-  public function create()
+  public function create(FormBuilder $formBuilder)
   {
-
+    $form = $formBuilder->create(InterestForm::class);
+    return view('interest.create', compact('form'));
   }
 
   /**

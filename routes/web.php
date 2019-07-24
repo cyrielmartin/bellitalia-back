@@ -24,12 +24,12 @@
 // Route::get('/', 'PlaceController@index');
 // Route::get('/admin/create', 'PlaceController@create');
 
-
+Route::post('/create', 'InterestController@create');
 Route::resource('interest', 'InterestController');
 Route::get('/', 'InterestController@index');
 
-Route::resource('bellitalia', 'BellitaliaController');
-Route::resource('tag', 'TagController');
-Route::resource('interesttag', 'InterestTagController');
-Route::resource('city', 'CityController');
-Route::resource('region', 'RegionController');
+// Route::resource('bellitalia', 'BellitaliaController');
+// Route::resource('tag', 'TagController');
+// Route::resource('interesttag', 'InterestTagController');
+// Route::resource('city', 'CityController');
+// Route::resource('region', 'RegionController');

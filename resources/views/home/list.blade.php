@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
-@section('list')
-
+@include('layouts.header')
+@section('content')
+rtyhugdfrtyhgfdrtgfdertgfd
 @endsection

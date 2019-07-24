@@ -1,10 +1,7 @@
 @extends('layouts.skeleton')
 
 @section('body')
-
-<body>
-@include('layouts.header')
-
-</body>
-
+  <body>
+    @yield('content')
+  </body>
 @endsection

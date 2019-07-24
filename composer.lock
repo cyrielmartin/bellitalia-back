@@ -4,8 +4,97 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f385b12d632b421967d135fab4cd6b98",
+    "content-hash": "47351926bcd5a42405ef8ba986c9d7e9",
     "packages": [
+        {
+            "name": "bestmomo/laravel5-artisan-language",
+            "version": "V0.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bestmomo/laravel-artisan-language.git",
+                "reference": "1481dcc2fa7986873ea0f71145831923c7ea408a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bestmomo/laravel-artisan-language/zipball/1481dcc2fa7986873ea0f71145831923c7ea408a",
+                "reference": "1481dcc2fa7986873ea0f71145831923c7ea408a",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.4",
+                "php": ">=5.6.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Bestmomo\\ArtisanLanguage\\ArtisanLanguageProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bestmomo\\ArtisanLanguage\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bestmomo",
+                    "email": "grandheretique@free.fr",
+                    "homepage": "http://laravel.sillo.org"
+                }
+            ],
+            "description": "Add artisan commands for language strings",
+            "homepage": "https://github.com/bestmomo/laravel-artisan-language",
+            "time": "2019-05-24T10:53:34+00:00"
+        },
+        {
+            "name": "caouecs/laravel-lang",
+            "version": "4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/caouecs/Laravel-lang.git",
+                "reference": "c5e3d884c46d616db0a1cc9401feb8cb998eaeb4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/caouecs/Laravel-lang/zipball/c5e3d884c46d616db0a1cc9401feb8cb998eaeb4",
+                "reference": "c5e3d884c46d616db0a1cc9401feb8cb998eaeb4",
+                "shasum": ""
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.10"
+            },
+            "suggest": {
+                "ablunier/laravel-lang-installer": "Command for easily add languages to a Laravel project",
+                "andrey-helldar/laravel-lang-publisher": "Easy installation and update of translation files for your project",
+                "arcanedev/laravel-lang": "Translations manager and checker for Laravel 5",
+                "overtrue/laravel-lang": "Command to add languages in your project"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "caouecs",
+                    "email": "caouecs@caouecs.net"
+                }
+            ],
+            "description": "Languages for Laravel",
+            "keywords": [
+                "lang",
+                "languages",
+                "laravel",
+                "lpm"
+            ],
+            "time": "2019-03-27T20:34:54+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",
