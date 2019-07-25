@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Interest;
 use App\City;
+use App\Region;
 use Kris\LaravelFormBuilder\FormBuilder;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 use App\Forms\InterestForm;
@@ -49,23 +50,38 @@ class InterestController extends Controller
     $request = $form->getRequest();
     $data = $request->all();
 
+    $region = $data['region'];
+    if(!isset($region['name'])) {
+      $validator = $form->validate(['region'.$key.'.name' => 'required'], ['region'.$key.'.name.required' => __('The region name is required')]);
+      $isValid = !$validator->fails();
+      $form->alterValid($form, $form, $isValid);
+      if (!$form->isValid()) {
+        return redirect()->back()->withErrors($form->getErrors())->withInput();
+      }
+      $form->redirectIfNotValid();
+    }
+    $regionModel = new Region(array('name'=> $region['name']));
+    $regionModel->save();
+
+    $city = $data['city'];
+    if(!isset($city['name'])) {
+      $validator = $form->validate(['city'.$key.'.name' => 'required'], ['city'.$key.'.name.required' => __('The city name is required')]);
+      $isValid = !$validator->fails();
+      $form->alterValid($form, $form, $isValid);
+      if (!$form->isValid()) {
+        return redirect()->back()->withErrors($form->getErrors())->withInput();
+      }
+      $form->redirectIfNotValid();
+    }
+    $cityModel = new City(array('name'=> $city['name'], 'region_id' => $regionModel->id));
+    $cityModel->save();
+
+    $data['city_id'] = $cityModel->id;
     $interest = new Interest($data);
     $interest->save();
+    dd($data, $interest);
 
-    // $cities = $data['city'];
-    // foreach ($cities as $key => $city) {
-    //   if(!isset($city['name'])) {
-    //     $validator = $form->validate(['city'.$key.'.name' => 'required'], ['city'.$key.'.name.required' => __('The city name is required')]);
-    //     $isValid = !$validator->fails();
-    //     $form->alterValid($form, $form, $isValid);
-    //     if (!$form->isValid()) {
-    //       return redirect()->back()->withErrors($form->getErrors())->withInput();
-    //     }
-    //     $form->redirectIfNotValid();
-    //   }
-    //   $cityModel = new City(array('name'=> $city['name'], 'interests_id' => $interest->id));
-    //   $cityModel->save();
-    // }
+
   }
 
   /**
