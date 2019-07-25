@@ -40,12 +40,12 @@ class InterestForm extends Form
       "label" => "Lien",
     ])
     ->add("latitude", "number", [
-      "label" => "Latitude",
+      "label" => "Latitude *",
       "rules" => "required|between:0,99.99",
       "attr" => ["step" => 0.0000001]
     ])
     ->add("longitude", "number", [
-      "label" => "Longitude",
+      "label" => "Longitude *",
       "rules" => "required|between:0,99.99",
       "attr" => ["step" => 0.00000001]
     ])

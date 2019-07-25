@@ -9,6 +9,8 @@ use App\Region;
 use Kris\LaravelFormBuilder\FormBuilder;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
 use App\Forms\InterestForm;
+use App\Bellitalia;
+use App\Tag;
 
 class InterestController extends Controller
 {
@@ -42,6 +44,7 @@ class InterestController extends Controller
   */
   public function store(FormBuilder $formBuiler)
   {
+    // Récupération de toutes les données envoyées via le InterestForm
     $form = $formBuiler->create(InterestForm::class);
     if(!$form->isValid()) {
       return redirect()->back()->withErrors($form->getErrors())->withInput();
@@ -50,6 +53,7 @@ class InterestController extends Controller
     $request = $form->getRequest();
     $data = $request->all();
 
+    // Récupération et stockage des données du child form RegionForm
     $region = $data['region'];
     if(!isset($region['name'])) {
       $validator = $form->validate(['region'.$key.'.name' => 'required'], ['region'.$key.'.name.required' => __('The region name is required')]);
@@ -63,6 +67,7 @@ class InterestController extends Controller
     $regionModel = new Region(array('name'=> $region['name']));
     $regionModel->save();
 
+    // Récupération et stockage des données du child form CityForm (et association de la ville avec une région)
     $city = $data['city'];
     if(!isset($city['name'])) {
       $validator = $form->validate(['city'.$key.'.name' => 'required'], ['city'.$key.'.name.required' => __('The city name is required')]);
@@ -76,10 +81,58 @@ class InterestController extends Controller
     $cityModel = new City(array('name'=> $city['name'], 'region_id' => $regionModel->id));
     $cityModel->save();
 
+    // Ce petit bout de code sert à associer la ville dans la table Interest
     $data['city_id'] = $cityModel->id;
+
+    // Récupération et stockage des données du child form BellitaliaForm
+    $bellitalia = $data['bellitalia'];
+
+    // Ce child form a deux champs. On les valide l'un après l'autre.
+    if(!isset($bellitalia['number'])) {
+      $validator = $form->validate(['bellitalia'.$key.'.number' => 'required'], ['bellitalia'.$key.'.number.required' => __('The bellitalia number is required')]);
+      $isValid = !$validator->fails();
+      $form->alterValid($form, $form, $isValid);
+      if (!$form->isValid()) {
+        return redirect()->back()->withErrors($form->getErrors())->withInput();
+      }
+      $form->redirectIfNotValid();
+    }
+
+    if(!isset($bellitalia['publication'])) {
+      $validator = $form->validate(['bellitalia'.$key.'.publication' => 'required'], ['bellitalia'.$key.'.publication.required' => __('The bellitalia publication is required')]);
+      $isValid = !$validator->fails();
+      $form->alterValid($form, $form, $isValid);
+      if (!$form->isValid()) {
+        return redirect()->back()->withErrors($form->getErrors())->withInput();
+      }
+      $form->redirectIfNotValid();
+    }
+
+    $bellitaliaModel = new Bellitalia(array('number' => $bellitalia['number'], 'publication' => $bellitalia['publication']));
+    $bellitaliaModel->save();
+
+    // Même petit bout de code que plus haut servant à associer un Bellitalia dans la table Interest.
+    $data['bellitalia_id'] = $bellitaliaModel->id;
+
+    // Une fois que tout ça est fait, on peut enregistrer l'Interest en base.
     $interest = new Interest($data);
     $interest->save();
 
+    // Et seulement après, on peut récupérer et stocker les données du child form TagForm,
+    // relation ManyToMany avec Interest (donc qui a besoin que Interest existe)
+    if (isset($data['tag'])) {
+      $tags = array();
+
+      foreach ($data['tag'] as $tag) {
+        $t = array("name" => $tag);
+        // Pour chaque tag sélectionné : soit il existe déjà, et on le récupère, soit on stocke son nom dynamiquement.
+        $tags[] = Tag::firstOrCreate($t)->id;
+      }
+
+      $interest->tags()->sync($tags);
+    }
+
+    return redirect(route('interest.index'));
 
   }
 
@@ -128,5 +181,3 @@ class InterestController extends Controller
   }
 
 }
-
-?>

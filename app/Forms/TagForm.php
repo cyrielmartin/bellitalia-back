@@ -23,11 +23,11 @@ class TagForm extends Form
     }
     $this
     ->add("name", "text", [
-      "label" => "Catégorie *",
-      "rules" => "required",
-      "error_messages" => [
-        "name.required" => "Veuillez associer une catégorie à votre point d'intérêt",
-      ]
+      "label" => "Catégorie",
+      // "rules" => "required",
+      // "error_messages" => [
+      //   "name.required" => "Veuillez associer une catégorie à votre point d'intérêt",
+      // ]
     ]);
     $this->formOptions = [
       "method" => $method,
