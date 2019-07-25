@@ -79,7 +79,6 @@ class InterestController extends Controller
     $data['city_id'] = $cityModel->id;
     $interest = new Interest($data);
     $interest->save();
-    dd($data, $interest);
 
 
   }
