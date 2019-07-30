@@ -4,6 +4,7 @@ namespace App\Forms;
 
 use Kris\LaravelFormBuilder\Form;
 use App\Bellitalia;
+use Carbon\Carbon;
 
 class BellitaliaForm extends Form
 {
@@ -15,11 +16,18 @@ class BellitaliaForm extends Form
       $url = route("interest.update", $this->getModel()->id);
       $method = "PUT";
       $label = __("Save");
+      $number = $this->getModel()->bellitalia()->get()->all();
+
+      foreach ($number as $thisnumber) {
+        $publication = date("Y-m-d", strtotime($thisnumber->publication));
+      }
+
     } else { //creation de modele
       $mode = "creation";
       $url = route("interest.store");
       $method = "POST";
       $label = __("Save");
+      $publication = '';
     }
     $this
     ->add("number", "number", [
@@ -31,10 +39,14 @@ class BellitaliaForm extends Form
     ])
     ->add("publication", "date", [
       "label" => "Date de publication du Bell'Italia",
+      "value" => $publication,
+
+
       // "rules" => "required",
       // "error_messages" => [
       //   "publication.required" => "Veuillez associer une date de publication à ce numéro de Bell'Italia",
       // ]
+      "value" => $publication
     ]);
     $this->formOptions = [
       "method" => $method,

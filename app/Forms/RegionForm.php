@@ -15,11 +15,17 @@ class RegionForm extends Form
       $url = route("interest.update", $this->getModel()->id);
       $method = "PUT";
       $label = __("Save");
+      $city = $this->getModel()->city()->get()->all();
+      foreach ($city as $thiscity) {
+        $region = $thiscity->region->name;
+      }
+
     } else { //creation de modele
       $mode = "creation";
       $url = route("interest.store");
       $method = "POST";
       $label = __("Save");
+      $region = '';
     }
     $this
     ->add("name", "text", [
@@ -27,7 +33,8 @@ class RegionForm extends Form
       "rules" => "required",
       "error_messages" => [
         "name.required" => "Veuillez associer votre ville à une région",
-      ]
+      ],
+      "value" => $region
     ]);
     $this->formOptions = [
       "method" => $method,

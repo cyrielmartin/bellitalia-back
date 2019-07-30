@@ -53,6 +53,7 @@ class InterestController extends Controller
     $request = $form->getRequest();
     $data = $request->all();
 
+
     // Récupération et stockage des données du child form RegionForm
     $region = $data['region'];
     if(!isset($region['name'])) {
@@ -99,6 +100,9 @@ class InterestController extends Controller
     }
 
     if(!isset($bellitalia['publication'])) {
+      // Formattage de la date pour stockage
+      $bellitalia['publication'] = date('Y-m-d', strtotime(str_replace('/', '-', $data['publication'])));
+      
       $validator = $form->validate(['bellitalia'.$key.'.publication' => 'required'], ['bellitalia'.$key.'.publication.required' => __('The bellitalia publication is required')]);
       $isValid = !$validator->fails();
       $form->alterValid($form, $form, $isValid);

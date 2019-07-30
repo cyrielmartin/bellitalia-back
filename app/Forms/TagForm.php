@@ -15,7 +15,8 @@ class TagForm extends Form
       $url = route("interest.update", $this->getModel()->id);
       $method = "PUT";
       $label = __("Save");
-      $names = $this->getModel()->tags()->pluck('name');
+      $names = $this->getModel()->tags()->pluck('name')->first();
+
 
     } else { //creation de modele
       $mode = "creation";
