@@ -153,8 +153,24 @@ class InterestController extends Controller
   * @param  int  $id
   * @return Response
   */
-  public function edit($id)
+  public function edit(FormBuilder $formBuiler, $id)
   {
+    $interest = Interest::find($id);
+
+
+
+
+    // dd($interest->tags()->get()->all());
+    // A l'édition, nécessaire de passer des paramètres supplémentaires au formulaire : les données de l'interest déjà en base. D'où le ['model' => $interest]
+    $form = $formBuiler->create(InterestForm::class, ['model' =>$interest]);
+    //Si je m'en tiens à ça, je ne récupèrerai que les infos de la table Interest + tables directement liées en belongsTo.
+    // Si je veux les infos Catégories et Région, il faut les importer
+
+    return view('interest.create', compact('form', 'interest'));
+
+
+    //     $categories = Category::whereType('infos')->get()->all();
+    // return view('admin.infos.create', compact('form', 'info', 'categories'));
 
   }
 

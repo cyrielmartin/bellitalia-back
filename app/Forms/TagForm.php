@@ -15,11 +15,14 @@ class TagForm extends Form
       $url = route("interest.update", $this->getModel()->id);
       $method = "PUT";
       $label = __("Save");
+      $names = $this->getModel()->tags()->pluck('name');
+
     } else { //creation de modele
       $mode = "creation";
       $url = route("interest.store");
       $method = "POST";
       $label = __("Save");
+      $names = "";
     }
     $this
     ->add("name", "text", [
@@ -28,6 +31,7 @@ class TagForm extends Form
       // "error_messages" => [
       //   "name.required" => "Veuillez associer une catégorie à votre point d'intérêt",
       // ]
+      "value" => $names
     ]);
     $this->formOptions = [
       "method" => $method,

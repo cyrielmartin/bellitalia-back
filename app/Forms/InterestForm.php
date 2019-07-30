@@ -13,16 +13,15 @@ class InterestForm extends Form
     // Edition
     if ($this->getModel() && $this->getModel()->id) {
       $mode = "edition";
-      $url = route("Interest.update", $this->getModel()->id);
+      $url = route("interest.update", $this->getModel()->id);
       $method = "PUT";
-      $label = __("Save");
-
+      $label = "Sauvegarder";
       // Création
     } else {
       $mode = "creation";
       $url = route("interest.store");
       $method = "POST";
-      $label = __("Save");
+      $label = "Sauvegarder";
 
     }
     $this
