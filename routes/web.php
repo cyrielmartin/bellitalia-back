@@ -28,6 +28,7 @@ Route::post('/create', 'InterestController@create');
 Route::resource('interest', 'InterestController');
 Route::get('/', 'InterestController@index');
 Route::get('interest/{interest}/edit', 'InterestController@edit');
+Route::get('interest/{interest}/delete', 'InterestController@destroy');
 
 // Route::resource('bellitalia', 'BellitaliaController');
 // Route::resource('tag', 'TagController');
