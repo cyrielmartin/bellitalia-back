@@ -31,27 +31,24 @@ class BellitaliaForm extends Form
     }
     $this
     ->add("number", "number", [
-      "label" => "Numéro du Bell'Italia",
-      // "rules" => "required",
-      // "error_messages" => [
-      //   "number.required" => "Veuillez associer votre point d'intérêt à un Bell'Italia",
-      // ]
+      "label" => "Numéro du Bell'Italia *",
+      "rules" => "required",
+      "error_messages" => [
+        "number.required" => "Veuillez associer votre point d'intérêt à un Bell'Italia",
+      ]
     ])
     ->add("publication", "date", [
-      "label" => "Date de publication du Bell'Italia",
+      "label" => "Date de publication du Bell'Italia *",
       "value" => $publication,
-
-
-      // "rules" => "required",
-      // "error_messages" => [
-      //   "publication.required" => "Veuillez associer une date de publication à ce numéro de Bell'Italia",
-      // ]
-      "value" => $publication
+      "rules" => "required",
+      "error_messages" => [
+        "publication.required" => "Veuillez associer une date de publication à ce numéro de Bell'Italia",
+      ]
     ]);
     $this->formOptions = [
       "method" => $method,
       "url" => $url
     ];
   }
-
+  
 }

@@ -11,24 +11,11 @@
 |
 */
 
-// Route::get('/', function () {
-//     return view('home');
-// });
-//
-// Route::get('/admin', function() {
-//     return view('admin.main');
-// });
-
-// Route::resource('place', 'PlaceController');
-//
-// Route::get('/', 'PlaceController@index');
-// Route::get('/admin/create', 'PlaceController@create');
-
 Route::post('/create', 'InterestController@create');
 Route::resource('interest', 'InterestController');
 Route::get('/', 'InterestController@index');
-Route::get('interest/{interest}/edit', 'InterestController@edit');
-Route::get('interest/{interest}/delete', 'InterestController@destroy');
+Route::get('interest/{interest}/edit', 'InterestController@edit')->name('interest.edit');
+Route::get('interest/{interest}/delete', 'InterestController@destroy')->name('interest.destroy');
 
 // Route::resource('bellitalia', 'BellitaliaController');
 // Route::resource('tag', 'TagController');

@@ -12,5 +12,5 @@
     <li class="nav-item">
       <a class="nav-link" href="{{route('interest.create')}}">Ajouter</a>
     </li>
-  </ul>  
+  </ul>
 </div>

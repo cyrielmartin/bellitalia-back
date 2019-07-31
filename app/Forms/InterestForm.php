@@ -41,11 +41,18 @@ class InterestForm extends Form
     ->add("latitude", "number", [
       "label" => "Latitude *",
       "rules" => "required|between:0,99.99",
+      "error_messages" => [
+        "latitude.required" => "Veuillez donner une latitude à votre point d'intérêt",
+      ],
       "attr" => ["step" => 0.0000001]
     ])
     ->add("longitude", "number", [
       "label" => "Longitude *",
       "rules" => "required|between:0,99.99",
+      "rules" => "required",
+      "error_messages" => [
+        "longitude.required" => "Veuillez donner une longitude à votre point d'intérêt",
+      ],
       "attr" => ["step" => 0.00000001]
     ])
     ->add('city', 'form', [
