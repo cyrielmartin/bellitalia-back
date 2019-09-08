@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @include('layouts.header')
 @section('content')
-  <div class="container">
+  <div class="container list">
     <table id="interestlist">
       <thead>
         <tr>
@@ -33,10 +33,27 @@
       </tbody>
     </table>
   </div>
-  
+
   <script>
   $(document).ready(function() {
-    $('#interestlist').DataTable();
+    $('#interestlist').DataTable(
+{
+  "language": {
+    "lengthMenu": "Afficher _MENU_ résultats par page",
+    "search": "Rechercher",
+    "zeroRecords": "Aucun résultat",
+    "info": "Page _PAGE_ sur _PAGES_",
+    "infoEmpty": "Aucun résultat",
+    "infoFiltered": "(parmi _MAX_ enregistrements)",
+    "paginate": {
+      "previous": "précédent",
+      "next": "suivant",
+    }
+  }
+}
+
+
+    );
   } );
   </script>
 
