@@ -26,6 +26,13 @@ class InterestController extends Controller
     return view('home.map', compact('interests'));
   }
 
+
+  public function getlist()
+  {
+dd(123);
+  }
+
+
   /**
   * Show the form for creating a new resource.
   *

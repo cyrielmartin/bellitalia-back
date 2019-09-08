@@ -11,12 +11,15 @@
 |
 */
 
-Route::post('/create', 'InterestController@create');
-Route::resource('interest', 'InterestController');
-Route::get('/', 'InterestController@index');
+Route::get('/create', 'InterestController@create')->name('interest.create');
+Route::post('/store', 'InterestController@store')->name('interest.store');
+Route::get('/list', 'InterestController@getlist')->name('interest.getlist');
 Route::get('interest/{interest}/edit', 'InterestController@edit')->name('interest.edit');
 Route::get('interest/{interest}/delete', 'InterestController@destroy')->name('interest.destroy');
+Route::get('/', 'InterestController@index')->name('interest.index');
 
+
+// Route::resource('interest', 'InterestController');
 // Route::resource('bellitalia', 'BellitaliaController');
 // Route::resource('tag', 'TagController');
 // Route::resource('interesttag', 'InterestTagController');

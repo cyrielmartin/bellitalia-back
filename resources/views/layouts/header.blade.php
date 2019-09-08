@@ -7,7 +7,7 @@
       <a class="nav-link active" href="{{route('interest.index')}}">Carte</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Liste</a>
+      <a class="nav-link" href="{{route('interest.getlist')}}">Liste</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="{{route('interest.create')}}">Ajouter</a>
