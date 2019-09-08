@@ -29,7 +29,8 @@ class InterestController extends Controller
 
   public function getlist()
   {
-dd(123);
+    $interests = Interest::all();
+    return view('home.list', compact('interests'));
   }
 
 
