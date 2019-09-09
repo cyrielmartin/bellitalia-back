@@ -16,3 +16,11 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Route::get('interest', 'InterestController@index');
+// Route::get('interest/{id}', 'InterestController@show');
+// Route::post('interest', 'InterestController@create');
+// Route::put('interest/{id}', 'InterestController@update');
+// Route::delete('interest/{id}', 'InterestController@destroy');
+
+Route::apiResource('interest', 'InterestController');

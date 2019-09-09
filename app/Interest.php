@@ -9,7 +9,7 @@ class Interest extends Model
 {
 
     protected $table = 'interests';
-    public $timestamps = true;
+    public $timestamps = false;
 
     use SoftDeletes;
 

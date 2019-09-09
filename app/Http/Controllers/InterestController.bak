@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Interest;
+use Validator;
+
+class InterestController extends Controller
+{
+
+  /**
+  * Lecture de toutes les ressources (GET)
+  */
+  public function index()
+  {
+    return response()->json(Interest::get(), 200);
+  }
+
+  /**
+  * Lecture d'une ressource (GET)
+  */
+  public function show($id)
+  {
+    $interest = Interest::find($id);
+    if(is_null($interest)){
+      return response()->json(['message' => 'Not found'], 404);
+    }
+    return response()->json($interest, 200);
+  }
+
+  /**
+  * Ajout d'une ressource (POST).
+  */
+  public function create(Request $request)
+  {
+    $rules = [
+      'name' => 'required',
+      'latitude' => 'required',
+      'longitude' => 'required',
+      'city_id' => 'required'
+      
+    ];
+
+    $validator = Validator::make($request->all(), $rules);
+    if($validator->fails()){
+      return response()->json($validator->errors(), 400);
+    }
+
+    $interest = Interest::create($request->all());
+    return response()->json($interest, 201);
+
+  }
+
+  /**
+  * Modification d'une ressource (PUT)
+  */
+  public function edit(Request $request, $id)
+  {
+    $interest = Interest::find($id);
+    if(is_null($interest)){
+      return response()->json(['message' => 'Not found'], 404);
+    }
+    $interest->update($request->all());
+    return response()->json($interest, 200);
+  }
+
+  /**
+  * Suppression d'une ressource (DELETE)
+  */
+  public function delete($id)
+  {
+    $interest = Interest::find($id);
+    if(is_null($interest)){
+      return response()->json(['message' => 'Not found'], 404);
+    }
+    $interest->delete();
+    return response()->json(null, 204);
+  }
+
+}
