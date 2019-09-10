@@ -2,6 +2,8 @@
 
 @section('body')
   <body>
-    @yield('content')
+    <div id="app">
+      @yield('content')
+    </div>
   </body>
 @endsection
