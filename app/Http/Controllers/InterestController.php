@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\City;
 use Illuminate\Http\Request;
-use App\Interest;
 use Validator;
+use App\Interest;
+use App\City;
+use App\Region;
+use App\Bellitalia;
 
 class InterestController extends Controller
 {
@@ -16,18 +18,9 @@ class InterestController extends Controller
   */
   public function index()
   {
+    // code 200 : succès de la requête
     return response()->json(Interest::get(), 200);
   }
-  //
-  // /**
-  // * Affichage du formulaire de création d'une ressource
-  // *
-  // * @return \Illuminate\Http\Response
-  // */
-  // public function create()
-  // {
-  //   //
-  // }
 
   /**
   * Enregistrement d'une nouvelle ressource (POST)
@@ -37,34 +30,97 @@ class InterestController extends Controller
   */
   public function store(Request $request)
   {
+    // Je mets ici mes règles de validation
     $rules = [
       'name' => 'required',
       'latitude' => 'required',
       'longitude' => 'required',
       'city.name' => 'required_without:city_id',
-    //   'region[name]' => 'required_unless:region_id',
+      'city.region.name' => 'required_without:city.region_id'
 
     ];
 
-    // dd($request->all());
+    // J'applique le Validator à toutes les requêtes envoyées.
     $validator = Validator::make($request->all(), $rules);
+    // Si moindre souci : 404.
     if($validator->fails()){
+      //code 400 : syntaxe requête erronée
       return response()->json($validator->errors(), 400);
     }
 
+    // Bonne pratique : on ne modifie pas directement la requête récupérée.
     $data = $request->all();
-if(isset($request['city_id'])){
-    $interest = Interest::create($data);
-}
-else {
-    $city = City::create(array("name" => $data['city']['name'], "region_id" => $data['city']['region_id']));
-    $data['city_id'] = $city->id;
-    $interest = Interest::create($data);
-}
 
 
-
-
+    // Si la ville est déjà en base...
+    if(isset($request['city_id'])){
+      // ... et qu'elle est associée à une région déjà en base...
+      if(isset($request['city']['region_id'])){
+        // ... et que le Bellitalia associé existe déjà en base
+        if(isset($request['bellitalia_id'])) {
+          //... on enregistre
+          $interest = Interest::create($data);
+          // Si le BellItalia n'existe pas encore en base, je le crée, je l'associe...
+        } else {
+          $bellitalia = BellItalia::create(array("number" => $data['bellitalia']['number']));
+          $data['bellitalia_id'] = $bellitalia->id;
+          //... et on enregistre
+          $interest = Interest::create($data);
+        }
+        // ... et qu'on veut l'associer à une nouvelle région...
+      } else {
+        $region = Region::create(array("name" => $data['city']['region']['name']));
+        $data['region_id'] = $region->id;
+        // ... et que le Bellitalia associé existe déjà en base
+        if(isset($request['bellitalia_id'])) {
+          //... on enregistre
+          $interest = Interest::create($data);
+          // Si le BellItalia n'existe pas encore en base, je le crée, je l'associe...
+        } else {
+          $bellitalia = BellItalia::create(array("number" => $data['bellitalia']['number']));
+          $data['bellitalia_id'] = $bellitalia->id;
+          //... et on enregistre
+          $interest = Interest::create($data);
+        }
+      }
+    }
+    // Si la ville n'est pas en base...
+    else {
+      // ... et qu'on veut l'associer à une région est déjà en base :
+      if(isset($request['city']['region_id'])){
+        $city = City::create(array("name" => $data['city']['name'], "region_id" => $data['city']['region_id']));
+        $data['city_id'] = $city->id;
+        // ... et que le Bellitalia associé existe déjà en base
+        if(isset($request['bellitalia_id'])) {
+          //... on enregistre
+          $interest = Interest::create($data);
+          // Si le BellItalia n'existe pas encore en base, je le crée, je l'associe...
+        } else {
+          $bellitalia = BellItalia::create(array("number" => $data['bellitalia']['number']));
+          $data['bellitalia_id'] = $bellitalia->id;
+          //... et on enregistre
+          $interest = Interest::create($data);
+        }
+        //... et qu'on veut l'associer à une région n'est pas encore en base :
+      } else {
+        $region = Region::create(array("name" => $data['city']['region']['name']));
+        $data['region_id'] = $region->id;
+        $city = City::create(array("name" => $data['city']['name'], "region_id" => $region->id));
+        $data['city_id'] = $city->id;
+        // ... et que le Bellitalia associé existe déjà en base
+        if(isset($request['bellitalia_id'])) {
+          //... on enregistre
+          $interest = Interest::create($data);
+          // Si le BellItalia n'existe pas encore en base, je le crée, je l'associe...
+        } else {
+          $bellitalia = BellItalia::create(array("number" => $data['bellitalia']['number']));
+          $data['bellitalia_id'] = $bellitalia->id;
+          //... et on enregistre
+          $interest = Interest::create($data);
+        }
+      }
+    }
+    // Code 201 : succès requête et création ressource
     return response()->json($interest, 201);
 
   }
@@ -81,19 +137,9 @@ else {
     if(is_null($interest)){
       return response()->json(['message' => 'Not found'], 404);
     }
+    // Code 200 : succès requête
     return response()->json($interest, 200);
   }
-
-  // /**
-  // * Affichage du formulaire de modification d'une ressource
-  // *
-  // * @param  int  $id
-  // * @return \Illuminate\Http\Response
-  // */
-  // public function edit($id)
-  // {
-  //   //
-  // }
 
   /**
   * Mise à jour d'une ressource (PUT)
@@ -109,6 +155,7 @@ else {
       return response()->json(['message' => 'Not found'], 404);
     }
     $interest->update($request->all());
+    // Code 200 : succès requête
     return response()->json($interest, 200);
   }
 
@@ -125,6 +172,7 @@ else {
       return response()->json(['message' => 'Not found'], 404);
     }
     $interest->delete();
+    // Code 204 : succès requête mais aucune information à envoyer
     return response()->json(null, 204);
   }
 }
