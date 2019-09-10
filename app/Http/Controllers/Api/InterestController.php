@@ -9,6 +9,7 @@ use App\Interest;
 use App\City;
 use App\Region;
 use App\Bellitalia;
+use App\Tag;
 
 class InterestController extends Controller
 {
@@ -31,6 +32,8 @@ class InterestController extends Controller
   */
   public function store(Request $request)
   {
+
+    //TODO : refaire validator
     // // Je mets ici mes règles de validation
     // $rules = [
     //   'name' => 'required',
@@ -50,27 +53,41 @@ class InterestController extends Controller
     //   return response()->json($validator->errors(), 400);
     // }
 
-    // Bonne pratique : on ne modifie pas directement la requête récupérée.
+    // Bonne pratique : on ne modifie pas directement la requête.
     $data = $request->all();
+
+    // Enregistrement des catégories nouvelles
+    // TODO Association avec Interest ?
+    if(isset($data['category_id'])) {
+      $category = Tag::firstOrCreate(array("name" => $data['category_id']));
+      $data['category_id'] = $category->id;
+    }
+
+    // Enregistrement des régions et des villes nouvelles
     if(isset($data['city_id'])) {
       if(isset($data['region_id'])){
-        if(isset($data['bellitalia_id'])) {
-          if(isset($data['publication'])) {
 
-            $region = Region::firstOrCreate(array("name" => $data['region_id']));
-            $data['region_id'] = $region->id;
+        $region = Region::firstOrCreate(array("name" => $data['region_id']));
+        $data['region_id'] = $region->id;
 
-            $city = City::firstOrCreate(array("name" => $data['city_id'], "region_id" => $region->id));
-            $data['city_id'] = $city->id;
-
-            $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id'], "publication" => $data['publication']));
-            $data['bellitalia_id'] = $bellitalia->id;
-
-            $interest = Interest::create($data);
-          }
-        }
+        $city = City::firstOrCreate(array("name" => $data['city_id'], "region_id" => $region->id));
+        $data['city_id'] = $city->id;
       }
     }
+
+    // Enregistrement des BellItalia nouveaux (numéros + publication)
+    // TODO formattage date month only ?
+    if(isset($data['bellitalia_id'])) {
+      if(isset($data['publication'])) {
+
+        $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id'], "publication" => $data['publication']));
+        $data['bellitalia_id'] = $bellitalia->id;
+      }
+    }
+    // Enregistrement de l'interest
+    $interest = Interest::create($data);
+    // Code 201 : succès requête et création ressource
+    return response()->json($interest, 201);
   }
   //
   // // Si la ville est déjà en base...
@@ -176,27 +193,7 @@ class InterestController extends Controller
       return response()->json(['message' => 'Not found'], 404);
     }
 
-    // Bonne pratique : on ne modifie pas directement la requête récupérée.
-    $data = $request->all();
-    if(isset($data['city_id'])) {
-      if(isset($data['region_id'])){
-        if(isset($data['bellitalia_id'])) {
-          if(isset($data['publication'])) {
-
-            $region = Region::updateOrCreate(array("name" => $data['region_id']));
-            $data['region_id'] = $region->id;
-
-            $city = City::updateOrCreate(array("name" => $data['city_id'], "region_id" => $region->id));
-            $data['city_id'] = $city->id;
-
-            $bellitalia = BellItalia::updateOrCreate(array("number" => $data['bellitalia_id'], "publication" => $data['publication']));
-            $data['bellitalia_id'] = $bellitalia->id;
-
-            $interest = Interest::updateOrCreate($data);
-          }
-        }
-      }
-    }
+// TODO : updateOrCreate ? 
 
     // return response()->json($interest, 200);
 

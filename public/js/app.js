@@ -1805,7 +1805,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         city_id: this.interestCity,
         region_id: this.interestRegion,
         bellitalia_id: this.interestNumber,
-        publication: this.interestDate
+        publication: this.interestDate,
+        category_id: this.interestCategory
       });
     }
   }
