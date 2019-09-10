@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\City;
 use Illuminate\Http\Request;
 use App\Interest;
 use Validator;
@@ -40,16 +41,30 @@ class InterestController extends Controller
       'name' => 'required',
       'latitude' => 'required',
       'longitude' => 'required',
-      'city_id' => 'required'
+      'city.name' => 'required_without:city_id',
+    //   'region[name]' => 'required_unless:region_id',
 
     ];
 
+    // dd($request->all());
     $validator = Validator::make($request->all(), $rules);
     if($validator->fails()){
       return response()->json($validator->errors(), 400);
     }
 
-    $interest = Interest::create($request->all());
+    $data = $request->all();
+if(isset($request['city_id'])){
+    $interest = Interest::create($data);
+}
+else {
+    $city = City::create(array("name" => $data['city']['name'], "region_id" => $data['city']['region_id']));
+    $data['city_id'] = $city->id;
+    $interest = Interest::create($data);
+}
+
+
+
+
     return response()->json($interest, 201);
 
   }
