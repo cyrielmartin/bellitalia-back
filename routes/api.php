@@ -23,4 +23,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Route::put('interest/{id}', 'InterestController@update');
 // Route::delete('interest/{id}', 'InterestController@destroy');
 
-Route::apiResource('interest', 'InterestController');
+Route::apiResource('interest', 'Api\InterestController');
