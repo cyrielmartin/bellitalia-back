@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@include('layouts.header')
+
 @section('content')
 
   <div id="mapid"></div>
@@ -29,7 +29,7 @@
   popup = popup + '<small>{{$tag->name}}</small> '
   @endforeach
 
-// Autres boucles ici si nécessaire
+  // Autres boucles ici si nécessaire
 
   // Et ensuite les éléments uniques à chaque popup. A chaque fois, concaténation sur le popup
   popup += '<h5>{{$interest->city->name}}, {{$interest->city->region->name}}</h5><h4>{{$interest->name}}</h4><p>{{$interest->description}}</p><p><a target="_blank" rel="noopener noreferrer" href="{{$interest->link}}">Photos</a></p><h6>Bell\'Italia n°{{$interest->bellitalia->number}}, {{\Carbon\Carbon::parse($interest->bellitalia->publication)->format('m/Y')}}</h6><a href="{{route('interest.edit', $interest->id)}}">Modifier</a>';

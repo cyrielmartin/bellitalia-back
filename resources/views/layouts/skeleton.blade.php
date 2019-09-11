@@ -32,7 +32,9 @@
 
 
 </head>
-
-@yield('body')
-
+<body>
+  @yield('header')
+  @yield('body')
+</body>
+<script src="/js/app.js"></script>
 </html>
