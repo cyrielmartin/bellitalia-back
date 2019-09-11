@@ -57,7 +57,7 @@
             </div>
             <div class="form-group">
               <label>Date de publication du Bell'Italia *</label>
-              <input type="date" class="form-control" v-model="interestDate">
+              <input type="date" class="form-control" id="datepicker" v-model="interestDate">
               <!-- <label for="bellitalia[publication]" class="control-label required">Date de publication du Bell'Italia *</label>
               <input name="bellitalia[publication]" type="date" value="" id="bellitalia[publication]" class="form-control"> -->
             </div>

@@ -37356,7 +37356,7 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
-                    attrs: { type: "date" },
+                    attrs: { type: "date", id: "datepicker" },
                     domProps: { value: _vm.interestDate },
                     on: {
                       input: function($event) {
@@ -49742,8 +49742,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/html/bellitalia2/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/html/bellitalia2/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/cyrielmartin/bellitalia/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/cyrielmartin/bellitalia/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

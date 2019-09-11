@@ -13,7 +13,7 @@
     "axios": "^0.18",
     "bootstrap": "^4.1.0",
     "cross-env": "^5.1",
-    "jquery": "^3.2",
+    "jquery": "^3.4.1",
     "laravel-mix": "^4.0.7",
     "lodash": "^4.17.5",
     "popper.js": "^1.12",
@@ -23,5 +23,9 @@
     "vue": "^2.5.17",
     "vue-template-compiler": "^2.6.10",
     "ws": "3.3.2"
+  },
+  "dependencies": {
+    "moment": "^2.24.0",
+    "vue-monthly-picker": "^0.2.8"
   }
 }

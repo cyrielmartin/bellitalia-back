@@ -1,5 +1,4 @@
 @extends('layouts.app')
-@include('layouts.header')
 @section('content')
   <div id="app">
 
@@ -29,8 +28,7 @@
 </div>
 
 </div>
+@endsection
 @push('scripts')
   <script src="/assets/js/plugins/bootstrap_fileinput/bootstrap_fileinput.min.js" charset="utf-8"></script>
-  <script src="/js/app.js"></script>
-
-@endsection
+  @endpush
