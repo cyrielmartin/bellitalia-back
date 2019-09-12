@@ -1,8 +1,25 @@
 @extends('layouts.app')
-
+@include('layouts.header')
 @section('content')
 
-  <div id="mapid"></div>
+    <div class="container-rem">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card">
+            <div id="app">
+
+
+              {{-- Composant Vue --}}
+              <map-component></map-component>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    @push('scripts')
+      <script src="/assets/js/plugins/bootstrap_fileinput/bootstrap_fileinput.min.js" charset="utf-8"></script>
+      <script src="/js/app.js"></script>
+  {{-- <div id="mapid"></div>
 
   <script>
 
@@ -32,7 +49,7 @@
   // Autres boucles ici si nécessaire
 
   // Et ensuite les éléments uniques à chaque popup. A chaque fois, concaténation sur le popup
-  popup += '<h5>{{$interest->city->name}}, {{$interest->city->region->name}}</h5><h4>{{$interest->name}}</h4><p>{{$interest->description}}</p><p><a target="_blank" rel="noopener noreferrer" href="{{$interest->link}}">Photos</a></p><h6>Bell\'Italia n°{{$interest->bellitalia->number}}, {{\Carbon\Carbon::parse($interest->bellitalia->publication)->format('m/Y')}}</h6><a href="{{route('interest.edit', $interest->id)}}">Modifier</a>';
+  popup += '<h5>{{$interest->city->name}}, {{$interest->city->region->name}}</h5><h4>{{$interest->name}}</h4><p>{{$interest->description}}</p><p><a target="_blank" rel="noopener noreferrer" href="{{$interest->link}}">Photos</a></p><h6>Bell\'Italia n°$interest->bellitalia->number, </h6><a href="{{route('interest.edit', $interest->id)}}">Modifier</a>';
 
   // Ajout des marqueurs
   var marker = L.marker(interest).addTo(mymap);
@@ -41,6 +58,6 @@
   marker.bindPopup(popup);
   @endforeach
 
-  </script>
+  </script> --}}
 
 @endsection

@@ -1,3 +1,5 @@
+
+
 {
   "private": true,
   "scripts": {
@@ -23,5 +25,10 @@
     "vue": "^2.5.17",
     "vue-template-compiler": "^2.6.10",
     "ws": "3.3.2"
+  },
+  "dependencies": {
+    "leaflet": "^1.5.1",
+    "vue2-leaflet": "^2.2.1",
+    "vue2-leaflet-markercluster": "^3.0.0"
   }
 }

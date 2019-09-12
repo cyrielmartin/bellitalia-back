@@ -12,64 +12,66 @@
             novalidate="true">
             <div class="form-group">
               <label>Nom du point d'intérêt *</label>
-              <input class="form-control" v-model="interestName">
-              <!-- <input name="name" type="text" id="name" class="form-control"> -->
+              <input class="form-control" v-model="interestName" :class="{'border-red': errors.name}">
+              <p class="text-error" v-if="errors.name" v-text="errors.name[0]"></p>
             </div>
+
             <div class="form-group">
               <label>Description</label>
               <textarea cols="50" rows="5" class="form-control" v-model="interestDescription"></textarea>
-              <!-- <textarea name="description" cols="50" rows="10" id="description" class="form-control"></textarea> -->
             </div>
+
             <div class="form-group">
               <label>Lien</label>
               <input class="form-control" v-model="interestLink">
-              <!-- <input name="link" type="url" id="link" class="form-control"> -->
             </div>
+
             <div class="form-group">
               <label>Latitude *</label>
-              <input type="number" min="0" max="100" step="any" class="form-control" v-model="interestLatitude">
-              <!-- <label for="latitude" class="control-label required">Latitude *</label> -->
-              <!-- <input step="1.0E-7" name="latitude" type="number" id="latitude" class="form-control"> -->
+              <input type="number" min="0" max="100" step="1.0E-7" class="form-control" v-model="interestLatitude" :class="{'border-red': errors.latitude}">
+              <p class="text-error" v-if="errors.latitude" v-text="errors.latitude[0]"></p>
             </div>
+
             <div class="form-group">
               <label>Longitude *</label>
-              <input type="number" min="0" max="100" step="any" class="form-control" v-model="interestLongitude">
-              <!-- <label for="longitude" class="control-label required">Longitude *</label>
-              <input step="1.0E-8" name="longitude" type="number" id="longitude" class="form-control"> -->
+              <input type="number" min="0" max="100" step="1.0E-8" class="form-control" v-model="interestLongitude" :class="{'border-red': errors.longitude}">
+              <p class="text-error" v-if="errors.longitude" v-text="errors.longitude[0]"></p>
             </div>
+
             <div class="form-group">
               <label>Nom de la ville *</label>
-              <input class="form-control" v-model="interestCity">
-              <!-- <label for="city[name]" class="control-label required">Nom de la ville *</label>
-              <input name="city[name]" type="text" id="city[name]" class="form-control"> -->
+              <input class="form-control" v-model="interestCity" :class="{'border-red': errors.city_id}">
+              <p class="text-error" v-if="errors.city_id" v-text="errors.city_id[0]"></p>
             </div>
+
             <div class="form-group">
               <label>Nom de la région *</label>
-              <input class="form-control" v-model="interestRegion">
-              <!-- <label for="region[name]" class="control-label required">Nom de la région *</label>
-              <input name="region[name]" type="text" value="" id="region[name]" class="form-control"> -->
+              <input class="form-control" v-model="interestRegion" :class="{'border-red': errors.region_id}">
+              <p class="text-error" v-if="errors.region_id" v-text="errors.region_id[0]"></p>
             </div>
+
             <div class="form-group">
               <label>Numéro du Bell'Italia *</label>
-              <input type="number" class="form-control" v-model="interestNumber">
-              <!-- <label for="bellitalia[number]" class="control-label required">Numéro du Bell'Italia *</label>
-              <input name="bellitalia[number]" type="number" id="bellitalia[number]" class="form-control"> -->
+              <input type="number" class="form-control" v-model="interestNumber" :class="{'border-red': errors.bellitalia_id}">
+              <p class="text-error" v-if="errors.bellitalia_id" v-text="errors.bellitalia_id[0]"></p>
             </div>
+
             <div class="form-group">
               <label>Date de publication du Bell'Italia *</label>
-              <input type="date" class="form-control" v-model="interestDate">
-              <!-- <label for="bellitalia[publication]" class="control-label required">Date de publication du Bell'Italia *</label>
-              <input name="bellitalia[publication]" type="date" value="" id="bellitalia[publication]" class="form-control"> -->
+              <input type="date" class="form-control" v-model="interestDate" :class="{'border-red': errors.publication}">
+              <p class="text-error" v-if="errors.publication" v-text="errors.publication[0]"></p>
             </div>
+
             <div class="form-group">
               <label>Catégorie</label>
               <input class="form-control" v-model="interestCategory">
-              <!-- <label for="tag[name]" class="control-label">Catégorie</label>
-              <input name="tag[name]" type="text" value="" id="tag[name]" class="form-control"> -->
+              <p class="text-error" v-if="errors.category_id" v-text="errors.category_id[0]"></p>
             </div>
+
             <div class="d-flex justify-content-center">
               <button type="submit" class="btn btn-fill btn-blue">Sauvegarder</button>
             </div>
+
           </form>
         </div>
       </div>
@@ -93,6 +95,7 @@ export default {
       interestDate:'',
       interestCategory:'',
       interestDate:'',
+      errors: {},
     }
   },
   methods: {
@@ -109,6 +112,22 @@ export default {
         publication: this.interestDate,
         category_id: this.interestCategory,
 
+      })
+      .then(() => {
+        this.interestName = ""
+        this.interestDescription = ""
+        this.interestLink = ""
+        this.interestLatitude = ""
+        this.interestLongitude = ""
+        this.interestCity = ""
+        this.interestRegion = ""
+        this.interestNumber = ""
+        this.interestDate = ""
+        this.interestCategory = ""
+        this.errors = {}
+      })
+      .catch(error => {
+        this.errors = error.response.data
       })
     },
   },

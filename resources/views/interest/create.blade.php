@@ -1,35 +1,23 @@
 @extends('layouts.app')
-
+@include('layouts.header')
 @section('content')
-  {{-- <div id="app"> --}}
-
 
   <div class="container-rem">
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card">
+          <div id="app">
 
-          <interest-form></interest-form>
-          {{-- <div class="ancien">
 
-          @if(isset($interest))
-          <div class="card-header">{{"Modifier un point d'intérêt"}}</div>
-        @else
-        <div class="card-header">{{"Ajouter un nouveau point d'intérêt"}}</div>
-      @endif
-      <div class="card-body">
-
-      {!! Form($form) !!}
-
-    </div> --}}
-
+            {{-- Composant Vue --}}
+            <interest-form></interest-form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
-</div>
-</div>
+  @push('scripts')
+    <script src="/assets/js/plugins/bootstrap_fileinput/bootstrap_fileinput.min.js" charset="utf-8"></script>
+    <script src="/js/app.js"></script>
 
-{{-- </div> --}}
 @endsection
-@push('scripts')
-  <script src="/assets/js/plugins/bootstrap_fileinput/bootstrap_fileinput.min.js" charset="utf-8"></script>
-@endpush
