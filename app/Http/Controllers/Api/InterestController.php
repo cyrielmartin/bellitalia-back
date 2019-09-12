@@ -11,6 +11,8 @@ use App\Region;
 use App\Bellitalia;
 use App\Tag;
 
+//Controller exclusivement dédié à l'Api
+
 class InterestController extends Controller
 {
   /**
@@ -115,12 +117,68 @@ class InterestController extends Controller
   */
   public function update(Request $request, $id)
   {
-    $interest = Interest::find($id);
-    if(is_null($interest)){
-      return response()->json(['message' => 'Not found'], 404);
-    }
-    
-    // TODO : updateOrCreate
+    //TODO
+
+    // $interest = Interest::find($id);
+    // if(is_null($interest)){
+    //   return response()->json(['message' => 'Not found'], 404);
+    // }
+
+    // // Je mets ici mes règles de validation du formulaire :
+    //     $rules = [
+    //         'name' => 'required|string',
+    //         'latitude' => 'required',
+    //         'longitude' => 'required',
+    //         'city_id' => 'required',
+    //         'region_id' => 'required',
+    //         'bellitalia_id' => 'required|integer',
+    //         'publication' => 'required',
+    //       ];
+
+    //       // J'applique le Validator à toutes les requêtes envoyées.
+    //       $validator = Validator::make($request->all(), $rules);
+    //       // Si moindre souci : 404.
+    //       if($validator->fails()){
+    //         //code 400 : syntaxe requête erronée
+    //         return response()->json($validator->errors(), 400);
+    //       }
+
+    //       // Bonne pratique : on ne modifie pas directement la requête.
+    //       $data = $request->all();
+
+    //       // Enregistrement des catégories nouvelles
+    //       // TODO Association avec Interest ?
+    //       if(isset($data['category_id'])) {
+    //         $category = Tag::updateOrCreate(array("name" => $data['category_id']));
+    //         $data['category_id'] = $category->id;
+    //       }
+
+    //       // Enregistrement des régions et des villes nouvelles
+    //       if(isset($data['city_id'])) {
+    //         if(isset($data['region_id'])){
+
+    //           $region = Region::updateOrCreate(array("name" => $data['region_id']));
+    //           $data['region_id'] = $region->id;
+
+    //           $city = City::updateOrCreate(array("name" => $data['city_id'], "region_id" => $region->id));
+    //           $data['city_id'] = $city->id;
+    //         }
+    //       }
+
+    //       // Enregistrement des BellItalia nouveaux (numéros + publication)
+    //       // TODO formattage date month only ?
+    //       if(isset($data['bellitalia_id'])) {
+    //         if(isset($data['publication'])) {
+
+    //           $bellitalia = BellItalia::updateOrCreate(array("number" => $data['bellitalia_id'], "publication" => $data['publication']));
+    //           $data['bellitalia_id'] = $bellitalia->id;
+    //         }
+    //       }
+    //       // Enregistrement de l'interest
+    //       $interest = Interest::update($data);
+
+    //       // Code 201 : succès requête et modification ressource
+    //       return response()->json($interest, 204);
 
   }
 

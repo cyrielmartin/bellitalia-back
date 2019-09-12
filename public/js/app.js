@@ -1859,25 +1859,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       map: null,
-      interestList: []
+      interestList: [],
+      loc: [],
+      marker: null
     };
   },
   mounted: function mounted() {
     var _this = this;
 
-    this.map = L.map('mapid').setView([40.853294, 14.305573], 5.5);
-    L.tileLayer('https://maps.heigit.org/openmapsurfer/tiles/roads/webmercator/{z}/{x}/{y}.png').addTo(this.map);
+    // Création de la carte
+    this.map = L.map('mapid').setView([40.853294, 14.305573], 5.5); //Surcouche de design
+
+    L.tileLayer('https://maps.heigit.org/openmapsurfer/tiles/roads/webmercator/{z}/{x}/{y}.png').addTo(this.map); //Requête Axios pour récupérer les données en BDD
+
     axios.get('/api/interest').then(function (response) {
-      return _this.interestList = response;
+      return _this.interestList = response.data, //Pour chacun des points d'intérêt en BDD, récupération des coordonnées
+      _this.interestList.forEach(function (element) {
+        _this.loc = [Number(element.latitude), Number(element.longitude)], //Création des marqueurs
+        _this.marker = L.marker(_this.loc).addTo(_this.map), //Création des popup et de leur contenu
+        _this.marker.bindPopup("<div>" + element.name + "</div><div>" + element.description + "</div><p><a target='_blank' rel='noopener noreferrer' href='" + element.link + "'>Photos</a></p>");
+      });
     });
-    var loc = [51.5076, -0.1276];
-    var marker = L.marker(loc).addTo(this.map);
-    marker.bindTooltip("Pop up");
-    console.log(this.interestList);
   }
 });
 
@@ -49751,8 +49759,10 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
  */
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+//Composant gérant le formulaire d'ajout de données
 
-Vue.component('interest-form', __webpack_require__(/*! ./components/InterestForm.vue */ "./resources/js/components/InterestForm.vue")["default"]);
+Vue.component('interest-form', __webpack_require__(/*! ./components/InterestForm.vue */ "./resources/js/components/InterestForm.vue")["default"]); //Composant gérant l'affichage de la carte
+
 Vue.component('map-component', __webpack_require__(/*! ./components/MapComponent.vue */ "./resources/js/components/MapComponent.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -49980,8 +49990,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/html/bellitalia2/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/html/bellitalia2/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/cyrielmartin/bellitalia/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/cyrielmartin/bellitalia/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

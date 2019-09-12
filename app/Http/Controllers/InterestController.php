@@ -12,6 +12,8 @@ use App\Forms\InterestForm;
 use App\Bellitalia;
 use App\Tag;
 
+// Controller exclusivement dédié au templating via Blade
+
 class InterestController extends Controller
 {
 
