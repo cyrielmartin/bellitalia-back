@@ -9,7 +9,7 @@
             <div id="app">
 
 
-              {{-- Composant Vue --}}
+              {{-- Composant Vue V1 --}}
               <map-component></map-component>
             </div>
           </div>
