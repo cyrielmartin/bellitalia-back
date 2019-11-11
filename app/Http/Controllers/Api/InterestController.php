@@ -26,6 +26,7 @@ class InterestController extends Controller
     return response()->json(Interest::get(), 200);
   }
 
+
   /**
   * Enregistrement d'une nouvelle ressource (POST)
   *
@@ -34,21 +35,36 @@ class InterestController extends Controller
   */
   public function store(Request $request)
   {
-
     // Je mets ici mes règles de validation du formulaire :
     $rules = [
-      'name' => 'required|string',
-      'latitude' => 'required',
-      'longitude' => 'required',
+      'name' => 'required',
+      'latitude' => 'numeric',
+      'longitude' => 'numeric',
       'city_id' => 'required',
       'region_id' => 'required',
       'bellitalia_id' => 'required|integer',
       'publication' => 'required',
     ];
 
+    // Messages d'erreur custom
+    $messages = [
+      'name.required' => "Veuillez saisir un nom",
+      'latitude.numeric' => "Veuillez saisir une latitude",
+      'longitude.numeric' => "Veuillez saisir une longitude",
+      'city_id.required' => "Veuillez saisir un nom de ville",
+      'region_id.required' => "Veuillez saisir un nom de région",
+      'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
+      'publication.required' => "Veuillez saisir un numéro de publication",
+
+
+
+
+
+    ];
+
     // J'applique le Validator à toutes les requêtes envoyées.
-    $validator = Validator::make($request->all(), $rules);
-    // Si moindre souci : 404.
+    $validator = Validator::make($request->all(), $rules, $messages);
+    // Si 1 des règles de validation n'est pas respectée
     if($validator->fails()){
       //code 400 : syntaxe requête erronée
       return response()->json($validator->errors(), 400);
