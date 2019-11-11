@@ -24,3 +24,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Route::delete('interest/{id}', 'InterestController@destroy');
 
 Route::apiResource('interest', 'Api\InterestController')->middleware('cors');
+Route::apiResource('region', 'Api\RegionController')->middleware('cors');
