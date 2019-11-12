@@ -52,7 +52,7 @@ class InterestController extends Controller
       'latitude.numeric' => "Veuillez saisir une latitude",
       'longitude.numeric' => "Veuillez saisir une longitude",
       'city_id.required' => "Veuillez saisir un nom de ville",
-      'region_id.required' => "Veuillez saisir un nom de région",
+      'region_id.required' => "Veuillez sélectionner une région",
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
       'publication.required' => "Veuillez saisir un numéro de publication",
 
