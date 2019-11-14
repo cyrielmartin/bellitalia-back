@@ -55,11 +55,6 @@ class InterestController extends Controller
       'region_id.required' => "Veuillez sélectionner une région",
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
       'publication.required' => "Veuillez saisir un numéro de publication",
-
-
-
-
-
     ];
 
     // J'applique le Validator à toutes les requêtes envoyées.
@@ -72,13 +67,6 @@ class InterestController extends Controller
 
     // Bonne pratique : on ne modifie pas directement la requête.
     $data = $request->all();
-
-    // Enregistrement des catégories nouvelles
-    // TODO Association avec Interest ?
-    if(isset($data['category_id'])) {
-      $category = Tag::firstOrCreate(array("name" => $data['category_id']));
-      $data['category_id'] = $category->id;
-    }
 
     // Enregistrement des régions et des villes nouvelles
     if(isset($data['city_id'])) {
@@ -93,7 +81,6 @@ class InterestController extends Controller
     }
 
     // Enregistrement des BellItalia nouveaux (numéros + publication)
-    // TODO formattage date month only ?
     if(isset($data['bellitalia_id'])) {
       if(isset($data['publication'])) {
 
@@ -101,8 +88,28 @@ class InterestController extends Controller
         $data['bellitalia_id'] = $bellitalia->id;
       }
     }
-    // Enregistrement de l'interest
-    $interest = Interest::create($data);
+
+    // Enfin, enregistrement des catégories/tags
+    if (isset($data['category_id'])) {
+      // Il peut y en avoir plusieurs -> tableau
+      $tags = array();
+      // Pour chacune des catégories sélectionnées
+      foreach ($data['category_id'] as $tag) {
+        // On récupère le nom
+        $t = array("name" => $tag);
+        // Et on vérifie s'il existe déjà en base.
+        //Si oui, on récupère son id.
+        //Si non, on le stocke (en lui créant un ID, donc).
+        $tags[] = Tag::firstOrCreate($t)->id;
+
+      }
+
+      // Une fois que tout ça est fait, on peut enregistrer l'Interest en base.
+      $interest = new Interest($data);
+      $interest->save();
+      // Et on n'oublie pas d'associer les catégories à l'intérêt qui vient d'être créé
+      $interest->tags()->sync($tags);
+    }
 
     // Code 201 : succès requête et création ressource
     return response()->json($interest, 201);
