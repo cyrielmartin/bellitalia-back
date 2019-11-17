@@ -34,19 +34,18 @@ class TagController extends Controller
     // Récupération requête
     $data = $request->all();
 
-    // Enregistrement des catégories/tags
-    if (isset($data['category_id'])) {
-      // Il peut y en avoir plusieurs -> tableau
-      $tags = array();
-      // Pour chacune des catégories sélectionnées
-      foreach ($data['category_id'] as $tag) {
-        // On récupère le nom
-        $t = array("name" => $tag);
-        // Et on vérifie s'il existe déjà en base.
-        //Si oui, on récupère son id.
-        //Si non, on le stocke (en lui créant un ID, donc).
-        foreach ($t as $tt) {
-          Tag::create($tt)->id;
+    // Enregistrement des tags (catégories) nouvellement créés
+    if (isset($data['tag_id'])) {
+      // Pour chacun des tags récupérés ici
+      foreach ($data['tag_id'] as $tag) {
+        // On formatte le tag comme la BDD l'attend : name : xxx
+        // On le stocke dans un tableau
+        $formattedTag = ["name" => $tag];
+        // On stocke chacun de ces tags en BDD
+        foreach ($formattedTag as $newTag) {
+          //firstOrCreate pour éviter tout doublon accidentel
+          //(même si normalement doublons rendus impossibles par Vue Multiselect)
+          Tag::firstOrCreate($newTag)->id;
         }
       }
     }

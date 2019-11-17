@@ -89,19 +89,18 @@ class InterestController extends Controller
       }
     }
 
-    // Enfin, enregistrement des catégories/tags
-    if (isset($data['category_id'])) {
-      // Il peut y en avoir plusieurs -> tableau
-      $tags = array();
-      // Pour chacune des catégories sélectionnées
-      foreach ($data['category_id'] as $tag) {
-        // On récupère le nom
-        $t = array("name" => $tag);
-        // Et on vérifie s'il existe déjà en base.
-        //Si oui, on récupère son id.
-        //Si non, on le stocke (en lui créant un ID, donc).
-        $tags[] = Tag::firstOrCreate($t)->id;
-
+    // Enregistrement des tags (catégories) nouvellement créés
+    if (isset($data['tag_id'])) {
+      // Pour chacun des tags récupérés ici
+      foreach ($data['tag_id'] as $tag) {
+        // On formatte le tag comme la BDD l'attend : name : xxx
+        // On le stocke dans un tableau
+        $formattedTag = ["name" => $tag];
+        // Stockage en BDD via un mass assignement :
+        // envoi direct d'un tableau en BDD
+        // attention, bien rendre fillable "name" dans model
+        // firstOrCreate important pour éviter doublons
+        $tags[] = Tag::firstOrCreate($formattedTag)->id;
       }
 
       // Une fois que tout ça est fait, on peut enregistrer l'Interest en base.
