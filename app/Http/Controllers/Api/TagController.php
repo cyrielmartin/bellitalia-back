@@ -8,7 +8,7 @@ use Validator;
 use App\Tag;
 
 
-//Controller exclusivement dédié à l'Api
+// TagController exclusivement dédié à l'Api
 
 class TagController extends Controller
 {
