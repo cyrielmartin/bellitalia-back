@@ -83,8 +83,10 @@ class InterestController extends Controller
     // Enregistrement des BellItalia nouveaux (numéros + publication)
     if(isset($data['bellitalia_id'])) {
       if(isset($data['publication'])) {
-
-        $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id'], "publication" => $data['publication']));
+        // Pour la date de publication, transformation nécessaire du format pour BDD
+        // Et ajout d'un jour car date renvoyée par vue monthly picker est à J-1
+        $formattedDate  = date('Y-m-d', strtotime($data['publication']. ' +1 day'));
+        $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id'], "publication" => $formattedDate));
         $data['bellitalia_id'] = $bellitalia->id;
       }
     }
@@ -107,7 +109,10 @@ class InterestController extends Controller
       $interest = new Interest($data);
       $interest->save();
       // Et on n'oublie pas d'associer les catégories à l'intérêt qui vient d'être créé
-      $interest->tags()->sync($tags);
+      // (uniquement si au moins 1 tag a été ajouté)
+      if(isset($tags)) {
+        $interest->tags()->sync($tags);
+      }
     }
 
     // Code 201 : succès requête et création ressource
