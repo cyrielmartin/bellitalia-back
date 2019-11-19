@@ -42,7 +42,7 @@ class InterestController extends Controller
       'longitude' => 'numeric',
       'city_id' => 'required',
       'region_id' => 'required',
-      'bellitalia_id' => 'required|integer',
+      'bellitalia_id' => 'required',
       'publication' => 'required',
     ];
 
