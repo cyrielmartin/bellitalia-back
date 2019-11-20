@@ -43,7 +43,6 @@ class InterestController extends Controller
       'city_id' => 'required',
       'region_id' => 'required',
       'bellitalia_id' => 'required',
-      'publication' => 'required',
     ];
 
     // Messages d'erreur custom
@@ -54,7 +53,6 @@ class InterestController extends Controller
       'city_id.required' => "Veuillez saisir un nom de ville",
       'region_id.required' => "Veuillez sélectionner une région",
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
-      'publication.required' => "Veuillez saisir un numéro de publication",
     ];
 
     // J'applique le Validator à toutes les requêtes envoyées.
@@ -67,7 +65,7 @@ class InterestController extends Controller
 
     // Bonne pratique : on ne modifie pas directement la requête.
     $data = $request->all();
-
+    dd($data);
     // Enregistrement des régions et des villes nouvelles
     if(isset($data['city_id'])) {
       if(isset($data['region_id'])){
