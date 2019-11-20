@@ -33,11 +33,13 @@ class BellitaliaController extends Controller
     // Enregistrement du Bellitalia nouvellement créé
     if (isset($data['number'])) {
       if(isset($data['date'])) {
-        // Formattage de la date pour BDD
-        $formattedDate  = date('Y-m-d', strtotime($data['date']));
+        // Formattage de la date pour BDD -> je ne prends que le mois et l'année
+        $formattedDate  = date('Y-m', strtotime($data['date']));
+        // Je force le jour à 01 comme je ne peux pas utiliser de MonthPicker en front
+        $forcedFirstDayDate = $formattedDate.'-01';
         //firstOrCreate pour éviter tout doublon accidentel
         //(même si normalement doublons rendus impossibles par Vue Multiselect)
-        $bellitalia = BellItalia::firstOrCreate(array("number" => $data['number'], "publication" => $formattedDate));
+        $bellitalia = BellItalia::firstOrCreate(array("number" => $data['number'], "publication" => $forcedFirstDayDate));
       }
     }
     return response()->json($bellitalia, 201);

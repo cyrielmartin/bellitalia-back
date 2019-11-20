@@ -65,8 +65,8 @@ class InterestController extends Controller
 
     // Bonne pratique : on ne modifie pas directement la requête.
     $data = $request->all();
-    dd($data);
-    // Enregistrement des régions et des villes nouvelles
+
+    // Enregistrement et association des régions et des villes nouvelles
     if(isset($data['city_id'])) {
       if(isset($data['region_id'])){
 
@@ -78,18 +78,13 @@ class InterestController extends Controller
       }
     }
 
-    // Enregistrement des BellItalia nouveaux (numéros + publication)
+    // Association du numéro de Bell'Italia
     if(isset($data['bellitalia_id'])) {
-      if(isset($data['publication'])) {
-        // Pour la date de publication, transformation nécessaire du format pour BDD
-        // Et ajout d'un jour car date renvoyée par vue monthly picker est à J-1
-        $formattedDate  = date('Y-m-d', strtotime($data['publication']. ' +1 day'));
-        $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id'], "publication" => $formattedDate));
-        $data['bellitalia_id'] = $bellitalia->id;
-      }
+      $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id']));
+      $data['bellitalia_id'] = $bellitalia->id;
     }
 
-    // Enregistrement des tags (catégories) nouvellement créés
+    // Association des tags (catégories)
     if (isset($data['tag_id'])) {
       // Pour chacun des tags récupérés ici
       foreach ($data['tag_id'] as $tag) {
