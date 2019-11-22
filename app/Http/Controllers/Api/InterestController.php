@@ -23,6 +23,8 @@ class InterestController extends Controller
   public function index()
   {
     // code 200 : succès de la requête
+
+
     return response()->json(Interest::get(), 200);
   }
 
