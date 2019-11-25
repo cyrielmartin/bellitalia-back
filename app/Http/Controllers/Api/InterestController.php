@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
+use App\Http\Resources\Interest as InterestResource;
 use App\Interest;
 use App\City;
 use App\Region;
@@ -24,8 +25,8 @@ class InterestController extends Controller
   {
     // code 200 : succès de la requête
 
-
-    return response()->json(Interest::get(), 200);
+    return InterestResource::collection(Interest::get());
+    // return response()->json(InterestResource::all(), 200);
   }
 
 
