@@ -123,12 +123,9 @@ class InterestController extends Controller
   */
   public function show($id)
   {
-    $interest = Interest::find($id);
-    if(is_null($interest)){
-      return response()->json(['message' => 'Not found'], 404);
-    }
-    // Code 200 : succès requête
-    return response()->json($interest, 200);
+    
+    return new InterestResource(Interest::FindOrFail($id));
+
   }
 
   /**
