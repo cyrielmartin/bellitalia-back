@@ -123,7 +123,7 @@ class InterestController extends Controller
   */
   public function show($id)
   {
-    
+
     return new InterestResource(Interest::FindOrFail($id));
 
   }
@@ -137,34 +137,46 @@ class InterestController extends Controller
   */
   public function update(Request $request, $id)
   {
-    //TODO
 
-    // $interest = Interest::find($id);
-    // if(is_null($interest)){
-    //   return response()->json(['message' => 'Not found'], 404);
-    // }
+    $interest = Interest::FindOrFail($id);
 
-    // // Je mets ici mes règles de validation du formulaire :
-    //     $rules = [
-    //         'name' => 'required|string',
-    //         'latitude' => 'required',
-    //         'longitude' => 'required',
-    //         'city_id' => 'required',
-    //         'region_id' => 'required',
-    //         'bellitalia_id' => 'required|integer',
-    //         'publication' => 'required',
-    //       ];
+    if(is_null($interest)){
+      return response()->json(['message' => 'Interest Not found'], 404);
+    }
 
-    //       // J'applique le Validator à toutes les requêtes envoyées.
-    //       $validator = Validator::make($request->all(), $rules);
-    //       // Si moindre souci : 404.
-    //       if($validator->fails()){
-    //         //code 400 : syntaxe requête erronée
-    //         return response()->json($validator->errors(), 400);
-    //       }
+    // Je mets ici mes règles de validation du formulaire :
+    $rules = [
+      'name' => 'required',
+      'latitude' => 'numeric',
+      'longitude' => 'numeric',
+      'city_id' => 'required',
+      'region_id' => 'required',
+      'bellitalia_id' => 'required',
+    ];
 
-    //       // Bonne pratique : on ne modifie pas directement la requête.
-    //       $data = $request->all();
+    // Messages d'erreur custom
+    $messages = [
+      'name.required' => "Veuillez saisir un nom",
+      'latitude.numeric' => "Veuillez saisir une latitude",
+      'longitude.numeric' => "Veuillez saisir une longitude",
+      'city_id.required' => "Veuillez saisir un nom de ville",
+      'region_id.required' => "Veuillez sélectionner une région",
+      'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
+    ];
+
+    // J'applique le Validator à toutes les requêtes envoyées.
+    $validator = Validator::make($request->all(), $rules, $messages);
+    // Si 1 des règles de validation n'est pas respectée
+    if($validator->fails()){
+      //code 400 : syntaxe requête erronée
+      return response()->json($validator->errors(), 400);
+    }
+
+    // Bonne pratique : on ne modifie pas directement la requête.
+    $data = $request->all();
+
+    dd($data);
+
 
     //       // Enregistrement des catégories nouvelles
     //       // TODO Association avec Interest ?
