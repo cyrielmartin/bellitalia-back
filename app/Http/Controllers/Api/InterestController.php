@@ -174,44 +174,51 @@ class InterestController extends Controller
 
     // Bonne pratique : on ne modifie pas directement la requête.
     $data = $request->all();
+    // Enregistrement et association des régions et des villes nouvelles
+    if(isset($data['city_id'])) {
+      if(isset($data['region_id'])){
 
-    dd($data);
+        $region = Region::firstOrCreate(array("name" => $data['region_id']));
+        $data['region_id'] = $region->id;
 
+        $city = City::firstOrCreate(array("name" => $data['city_id'], "region_id" => $region->id));
+        $data['city_id'] = $city->id;
+      }
+    }
 
-    //       // Enregistrement des catégories nouvelles
-    //       // TODO Association avec Interest ?
-    //       if(isset($data['category_id'])) {
-    //         $category = Tag::updateOrCreate(array("name" => $data['category_id']));
-    //         $data['category_id'] = $category->id;
-    //       }
+    // Association du numéro de Bell'Italia
+    if(isset($data['bellitalia_id'])) {
+      $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id']));
+      $data['bellitalia_id'] = $bellitalia->id;
+    }
 
-    //       // Enregistrement des régions et des villes nouvelles
-    //       if(isset($data['city_id'])) {
-    //         if(isset($data['region_id'])){
+    // Association des tags (catégories)
+    if (isset($data['tag_id'])) {
+      // Pour chacun des tags récupérés ici
+      foreach ($data['tag_id'] as $tag) {
+        // On formatte le tag comme la BDD l'attend : name : xxx
+        // On le stocke dans un tableau
+        $formattedTag = ["name" => $tag];
+        // Stockage en BDD via un mass assignement :
+        // envoi direct d'un tableau en BDD
+        // attention, bien rendre fillable "name" dans model
+        // firstOrCreate important pour éviter doublons
+        $tags[] = Tag::firstOrCreate($formattedTag)->id;
+      }
 
-    //           $region = Region::updateOrCreate(array("name" => $data['region_id']));
-    //           $data['region_id'] = $region->id;
+      // Une fois que tout ça est fait, on peut enregistrer l'Interest en base.
+      $interest->update($data);
+      // Et on n'oublie pas d'associer les catégories à l'intérêt qui vient d'être créé
+      // Si aucun tag n'est envoyé, on envoie un tableau vide 
+      if(isset($tags)) {
+        $interest->tags()->sync($tags);
+      } else {
+        $interest->tags()->sync([]);
+      }
+    }
 
-    //           $city = City::updateOrCreate(array("name" => $data['city_id'], "region_id" => $region->id));
-    //           $data['city_id'] = $city->id;
-    //         }
-    //       }
-
-    //       // Enregistrement des BellItalia nouveaux (numéros + publication)
-    //       // TODO formattage date month only ?
-    //       if(isset($data['bellitalia_id'])) {
-    //         if(isset($data['publication'])) {
-
-    //           $bellitalia = BellItalia::updateOrCreate(array("number" => $data['bellitalia_id'], "publication" => $data['publication']));
-    //           $data['bellitalia_id'] = $bellitalia->id;
-    //         }
-    //       }
-    //       // Enregistrement de l'interest
-    //       $interest = Interest::update($data);
-
-    //       // Code 201 : succès requête et modification ressource
-    //       return response()->json($interest, 204);
-
+    // Code 201 : succès requête et création ressource
+    return response()->json($interest, 201);
   }
 
   /**
