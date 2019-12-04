@@ -209,7 +209,7 @@ class InterestController extends Controller
       // Une fois que tout ça est fait, on peut enregistrer l'Interest en base.
       $interest->update($data);
       // Et on n'oublie pas d'associer les catégories à l'intérêt qui vient d'être créé
-      // Si aucun tag n'est envoyé, on envoie un tableau vide 
+      // Si aucun tag n'est envoyé, on envoie un tableau vide
       if(isset($tags)) {
         $interest->tags()->sync($tags);
       } else {
@@ -229,7 +229,7 @@ class InterestController extends Controller
   */
   public function destroy($id)
   {
-    $interest = Interest::find($id);
+    $interest = Interest::findOrFail($id);
     if(is_null($interest)){
       return response()->json(['message' => 'Not found'], 404);
     }
