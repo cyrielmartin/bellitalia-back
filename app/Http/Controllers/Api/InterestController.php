@@ -68,11 +68,26 @@ class InterestController extends Controller
 
     // Bonne pratique : on ne modifie pas directement la requête.
     $data = $request->all();
-    
-    if ($request->hasFile('image')) {
-      $data['image'] = $request->file('Image')
-      ->store('uploads', 'public');
+
+    //     if ($request->hasFile('image')) {
+    //       dd('ici');
+    //       $data['image'] = $request->file('Image')
+    //       ->store('uploads', 'public');
+    //     }
+    //
+    // dd('stop');
+    if($request->get('image'))
+    {
+      $image = $request->get('image');
+      $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
+      \Image::make($request->get('image'))->save(public_path('/storage/public/uploads/').$name);
     }
+
+    $image= new FileUpload();
+    dd($image);
+    $image->image_name = $name;
+    $image->save();
+    dd($image);
 
     // Enregistrement et association des régions et des villes nouvelles
     if(isset($data['city_id'])) {
