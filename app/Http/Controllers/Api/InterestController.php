@@ -69,25 +69,18 @@ class InterestController extends Controller
     // Bonne pratique : on ne modifie pas directement la requête.
     $data = $request->all();
 
-    //     if ($request->hasFile('image')) {
-    //       dd('ici');
-    //       $data['image'] = $request->file('Image')
-    //       ->store('uploads', 'public');
-    //     }
-    //
-    // dd('stop');
+    // Si une image est envoyée
     if($request->get('image'))
     {
+      // On la renomme et on la stocke
       $image = $request->get('image');
       $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
-      \Image::make($request->get('image'))->save(public_path('/storage/public/uploads/').$name);
-    }
+      \Image::make($request->get('image'))->save('./assets/interests/'. $name);
 
-    $image= new FileUpload();
-    dd($image);
-    $image->image_name = $name;
-    $image->save();
-    dd($image);
+      // On stocke l'URL vers l'image
+      $imagePath = url('/assets/interests/'.$name);
+      $data['image'] = $imagePath;
+    }
 
     // Enregistrement et association des régions et des villes nouvelles
     if(isset($data['city_id'])) {
@@ -194,6 +187,26 @@ class InterestController extends Controller
 
     // Bonne pratique : on ne modifie pas directement la requête.
     $data = $request->all();
+
+    // Si une image est envoyée
+    if($request->get('image'))
+
+    // On vérifie que l'image envoyée n'est pas déjà celle en base.
+    // On ne traite l'image envoyée que si ce n'est pas le cas
+    // Au final, on ne rentre dans cette condition que si l'image envoyée est nouvelle
+    if($interest->image != $data['image']) {
+      {
+        // On la renomme
+        $image = $request->get('image');
+        $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
+        \Image::make($request->get('image'))->save('./assets/interests/'. $name);
+
+        // On stocke l'URL vers l'image
+        $imagePath = url('/assets/interests/'.$name);
+        $data['image'] = $imagePath;
+      }
+    }
+
     // Enregistrement et association des régions et des villes nouvelles
     if(isset($data['city_id'])) {
       if(isset($data['region_id'])){
