@@ -38,7 +38,7 @@ class InterestController extends Controller
   */
   public function store(Request $request)
   {
-    // Je mets ici mes règles de validation du formulaire :
+    // Règles de validation du formulaire :
     $rules = [
       'name' => 'required',
       'latitude' => 'numeric',
@@ -46,6 +46,7 @@ class InterestController extends Controller
       'city_id' => 'required',
       'region_id' => 'required',
       'bellitalia_id' => 'required',
+      'tag_id' => 'required',
     ];
 
     // Messages d'erreur custom
@@ -56,6 +57,7 @@ class InterestController extends Controller
       'city_id.required' => "Veuillez saisir un nom de ville",
       'region_id.required' => "Veuillez sélectionner une région",
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
+      'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
     ];
 
     // J'applique le Validator à toutes les requêtes envoyées.
