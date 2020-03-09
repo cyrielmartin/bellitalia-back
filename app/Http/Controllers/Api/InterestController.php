@@ -71,6 +71,12 @@ class InterestController extends Controller
     // Bonne pratique : on ne modifie pas directement la requête.
     $data = $request->all();
 
+// Problème 9 mars soir :
+// Le multiselect sur city renvoie un tableau (avant : string)
+// Même en ciblant le bon index, ça ne marche pas (array to string conversion)
+// En l'état, ça marche, mais pb, duplique la ville même si elle existe déjà
+// (ne passe pas par first)
+
     // Si une image est envoyée
     if($request->get('image'))
     {
