@@ -70,7 +70,6 @@ class InterestController extends Controller
 
     // Bonne pratique : on ne modifie pas directement la requête.
     $data = $request->all();
-
     // Si une image est envoyée
     if($request->get('image'))
     {
@@ -83,12 +82,11 @@ class InterestController extends Controller
       $imagePath = url('/assets/interests/'.$name);
       $data['image'] = $imagePath;
     }
-
     // Enregistrement et association des régions et des villes nouvelles
     if(isset($data['city_id']['name'])) {
-      if(isset($data['region_id'])){
+      if(isset($data['region_id']['name'])){
 
-        $region = Region::firstOrCreate(array("name" => $data['region_id']));
+        $region = Region::firstOrCreate(array("name" => $data['region_id']['name']));
         $data['region_id'] = $region->id;
 
         $city = City::firstOrCreate(array("name" => $data['city_id']['name'], "region_id" => $region->id));
@@ -213,9 +211,9 @@ class InterestController extends Controller
 
     // Enregistrement et association des régions et des villes nouvelles
     if(isset($data['city_id']['name'])) {
-      if(isset($data['region_id'])){
+      if(isset($data['region_id']['name'])){
 
-        $region = Region::firstOrCreate(array("name" => $data['region_id']));
+        $region = Region::firstOrCreate(array("name" => $data['region_id']['name']));
         $data['region_id'] = $region->id;
 
         $city = City::firstOrCreate(array("name" => $data['city_id']['name'], "region_id" => $region->id));
