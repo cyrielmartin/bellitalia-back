@@ -52,8 +52,8 @@ class InterestController extends Controller
     // Messages d'erreur custom
     $messages = [
       'name.required' => "Veuillez saisir un nom",
-      'latitude.numeric' => "Veuillez saisir une latitude",
-      'longitude.numeric' => "Veuillez saisir une longitude",
+      'latitude.numeric' => "Veuillez saisir une latitude valide",
+      'longitude.numeric' => "Veuillez saisir une longitude valide",
       'city_id.required' => "Veuillez saisir un nom de ville",
       'region_id.required' => "Veuillez sélectionner une région",
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
@@ -71,12 +71,6 @@ class InterestController extends Controller
     // Bonne pratique : on ne modifie pas directement la requête.
     $data = $request->all();
 
-// Problème 9 mars soir :
-// Le multiselect sur city renvoie un tableau (avant : string)
-// Même en ciblant le bon index, ça ne marche pas (array to string conversion)
-// En l'état, ça marche, mais pb, duplique la ville même si elle existe déjà
-// (ne passe pas par first)
-
     // Si une image est envoyée
     if($request->get('image'))
     {
@@ -91,13 +85,13 @@ class InterestController extends Controller
     }
 
     // Enregistrement et association des régions et des villes nouvelles
-    if(isset($data['city_id'])) {
+    if(isset($data['city_id']['name'])) {
       if(isset($data['region_id'])){
 
         $region = Region::firstOrCreate(array("name" => $data['region_id']));
         $data['region_id'] = $region->id;
 
-        $city = City::firstOrCreate(array("name" => $data['city_id'], "region_id" => $region->id));
+        $city = City::firstOrCreate(array("name" => $data['city_id']['name'], "region_id" => $region->id));
         $data['city_id'] = $city->id;
       }
     }
@@ -173,16 +167,18 @@ class InterestController extends Controller
       'city_id' => 'required',
       'region_id' => 'required',
       'bellitalia_id' => 'required',
+      'tag_id' => 'required',
     ];
 
     // Messages d'erreur custom
     $messages = [
-      'name.required' => "Veuillez saisir un nom",
-      'latitude.numeric' => "Veuillez saisir une latitude",
-      'longitude.numeric' => "Veuillez saisir une longitude",
+      'name.required' => "Veuillez saisir un nom d'intérêt",
+      'latitude.numeric' => "Veuillez saisir une latitude valide",
+      'longitude.numeric' => "Veuillez saisir une longitude valide",
       'city_id.required' => "Veuillez saisir un nom de ville",
       'region_id.required' => "Veuillez sélectionner une région",
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
+      'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
     ];
 
     // J'applique le Validator à toutes les requêtes envoyées.
@@ -216,13 +212,13 @@ class InterestController extends Controller
     }
 
     // Enregistrement et association des régions et des villes nouvelles
-    if(isset($data['city_id'])) {
+    if(isset($data['city_id']['name'])) {
       if(isset($data['region_id'])){
 
         $region = Region::firstOrCreate(array("name" => $data['region_id']));
         $data['region_id'] = $region->id;
 
-        $city = City::firstOrCreate(array("name" => $data['city_id'], "region_id" => $region->id));
+        $city = City::firstOrCreate(array("name" => $data['city_id']['name'], "region_id" => $region->id));
         $data['city_id'] = $city->id;
       }
     }
