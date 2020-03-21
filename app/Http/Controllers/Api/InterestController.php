@@ -47,6 +47,7 @@ class InterestController extends Controller
       'region_id' => 'required',
       'bellitalia_id' => 'required',
       'tag_id' => 'required',
+      'image' => 'max:30000000',
     ];
 
     // Messages d'erreur custom
@@ -58,6 +59,7 @@ class InterestController extends Controller
       'region_id.required' => "Veuillez sélectionner une région",
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
+      'image.file' => "L'image dépasse le poids autorisé (30Mo)",
     ];
 
     // J'applique le Validator à toutes les requêtes envoyées.
@@ -166,6 +168,7 @@ class InterestController extends Controller
       'region_id' => 'required',
       'bellitalia_id' => 'required',
       'tag_id' => 'required',
+      'image' => 'max:30000000',
     ];
 
     // Messages d'erreur custom
@@ -177,6 +180,7 @@ class InterestController extends Controller
       'region_id.required' => "Veuillez sélectionner une région",
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
+      'image.file' => "L'image dépasse le poids autorisé (30Mo)",
     ];
 
     // J'applique le Validator à toutes les requêtes envoyées.
