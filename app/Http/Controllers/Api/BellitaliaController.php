@@ -29,7 +29,6 @@ class BellitaliaController extends Controller
   {
     // Récupération requête
     $data = $request->all();
-
     // Enregistrement du Bellitalia nouvellement créé
     if (isset($data['number'])) {
       if(isset($data['date'])) {
@@ -39,7 +38,7 @@ class BellitaliaController extends Controller
         $forcedFirstDayDate = $formattedDate.'-01';
         //firstOrCreate pour éviter tout doublon accidentel
         //(même si normalement doublons rendus impossibles par Vue Multiselect)
-        $bellitalia = BellItalia::firstOrCreate(array("number" => $data['number'], "publication" => $forcedFirstDayDate));
+        $bellitalia = BellItalia::firstOrCreate(array("number" => $data['number'], "publication" => $forcedFirstDayDate, "image" => null));
       }
     }
     return response()->json($bellitalia, 201);
