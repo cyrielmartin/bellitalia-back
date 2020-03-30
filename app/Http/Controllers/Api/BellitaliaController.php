@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Bellitalia;
+use Validator;
 
 class BellitaliaController extends Controller
 {
@@ -27,9 +28,27 @@ class BellitaliaController extends Controller
   */
   public function store(Request $request)
   {
+
+    // Règles de validation :
+    $rules = [
+      'number' => 'numeric',
+    ];
+
+    // Messages d'erreur custom
+    $messages = [
+      'number.numeric' => "Veuillez saisir un numéro de publication valide",
+    ];
+
+    // J'applique le Validator à toutes les requêtes envoyées.
+    $validator = Validator::make($request->all(), $rules, $messages);
+    // Si 1 des règles de validation n'est pas respectée
+    if($validator->fails()){
+      //code 400 : syntaxe requête erronée
+      return response()->json($validator->errors(), 400);
+    }
+
     // Récupération requête
     $data = $request->all();
-    dd($data);
     // Enregistrement du Bellitalia nouvellement créé
     if (isset($data['number'])) {
       if(isset($data['date'])) {
