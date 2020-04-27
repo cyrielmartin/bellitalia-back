@@ -72,7 +72,7 @@ class InterestController extends Controller
 
     // Bonne pratique : on ne modifie pas directement la requête.
     $data = $request->all();
-    dd($data);
+
     // Si une image est envoyée
     if($request->get('image'))
     {

@@ -35,6 +35,7 @@ class BellitaliaController extends Controller
     ];
 
     // Messages d'erreur custom
+    // (même si normalement, vérif en front rendent impossible l'arrivée de lettres ici)
     $messages = [
       'number.numeric' => "Veuillez saisir un numéro de publication valide",
     ];
@@ -49,16 +50,17 @@ class BellitaliaController extends Controller
 
     // Récupération requête
     $data = $request->all();
+
     // Enregistrement du Bellitalia nouvellement créé
     if (isset($data['number'])) {
       if(isset($data['date'])) {
-        // Formattage de la date pour BDD -> je ne prends que le mois et l'année
-        $formattedDate  = date('Y-m', strtotime($data['date']));
-        // Je force le jour à 01 comme je ne peux pas utiliser de MonthPicker en front
-        $forcedFirstDayDate = $formattedDate.'-01';
+        // Formattage de la date pour BDD :
+        // J'ajoute 1 jour (bizarrement, toutes les dates renvoyées par le front sont à J-1)
+        $date = $data['date'];
+        $formattedDate  = date('Y-m-d', strtotime($date . ' +1 day'));
         //firstOrCreate pour éviter tout doublon accidentel
         //(même si normalement doublons rendus impossibles par Vue Multiselect)
-        $bellitalia = BellItalia::firstOrCreate(array("number" => $data['number'], "publication" => $forcedFirstDayDate, "image" => null));
+        $bellitalia = BellItalia::firstOrCreate(array("number" => $data['number'], "publication" => $formattedDate, "image" => null));
       }
     }
     return response()->json($bellitalia, 201);
