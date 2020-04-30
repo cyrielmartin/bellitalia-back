@@ -31,14 +31,17 @@ class BellitaliaController extends Controller
     // Règles de validation :
     $rules = [
       'number' => 'numeric',
-      'date' => 'required'
+      'date' => 'required',
+      'image' => 'required|max:30000000',
     ];
 
     // Messages d'erreur custom
     // (même si normalement, vérif en front rendent impossible l'arrivée de lettres ici)
     $messages = [
       'number.numeric' => "Veuillez saisir un numéro de publication valide",
-      'date.required' => "Vous devez saisir une date de publication"
+      'date.required' => "Vous devez saisir une date de publication",
+      'image.required' => "Vous devez associer une couverture à cette publication",
+      'image.max' => "L'image dépasse le poids autorisé (30Mo)",
     ];
 
     // J'applique le Validator à toutes les requêtes envoyées.
