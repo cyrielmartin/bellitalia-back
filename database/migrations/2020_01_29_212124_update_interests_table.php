@@ -14,7 +14,7 @@ class UpdateInterestsTable extends Migration
     public function up()
     {
       Schema::table('interests', function (Blueprint $table) {
-          $table->string('image')->nullable;
+          $table->string('image')->nullable();
       });
     }
 

@@ -51,7 +51,7 @@ class BellitaliaController extends Controller
     }
     // Récupération requête
     $data = $request->all();
-
+dd($data);
     // Enregistrement du Bellitalia nouvellement créé
     if (isset($data['number'])) {
       if(isset($data['date'])) {

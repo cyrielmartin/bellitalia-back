@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Bellitalia extends Model 
+class Bellitalia extends Model
 {
 
     protected $table = 'bellitalias';
@@ -14,8 +14,8 @@ class Bellitalia extends Model
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
-    protected $fillable = array('number', 'publication');
-    protected $visible = array('number', 'publication');
+    protected $fillable = array('number', 'publication', 'image');
+    protected $visible = array('number', 'publication', 'image');
 
     public function interests()
     {

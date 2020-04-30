@@ -70,10 +70,9 @@ class InterestController extends Controller
       return response()->json($validator->errors(), 400);
     }
 
-    // Bonne pratique : on ne modifie pas directement la requête.
     $data = $request->all();
 
-    // Si une image est envoyée
+// Si une image est envoyée
     if($request->get('image'))
     {
       // On la renomme et on la stocke
