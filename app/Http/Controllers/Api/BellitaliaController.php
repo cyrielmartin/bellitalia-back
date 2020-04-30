@@ -51,7 +51,20 @@ class BellitaliaController extends Controller
     }
     // Récupération requête
     $data = $request->all();
-dd($data);
+
+    // Si une image est envoyée
+    if($request->get('image'))
+    {
+      // On la renomme et on la stocke
+      $image = $request->get('image');
+      $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
+      \Image::make($request->get('image'))->save('./assets/publications/'. $name);
+
+      // On stocke l'URL vers l'image
+      $imagePath = url('/assets/publications/'.$name);
+      $data['image'] = $imagePath;
+    }
+
     // Enregistrement du Bellitalia nouvellement créé
     if (isset($data['number'])) {
       if(isset($data['date'])) {
@@ -61,7 +74,7 @@ dd($data);
         $formattedDate  = date('Y-m-d', strtotime($date . ' +1 day'));
         //firstOrCreate pour éviter tout doublon accidentel
         //(même si normalement doublons rendus impossibles par Vue Multiselect)
-        $bellitalia = BellItalia::firstOrCreate(array("number" => $data['number'], "publication" => $formattedDate, "image" => null));
+        $bellitalia = BellItalia::firstOrCreate(array("number" => $data['number'], "publication" => $formattedDate, "image" => $imagePath));
       }
     }
     return response()->json($bellitalia, 201);
