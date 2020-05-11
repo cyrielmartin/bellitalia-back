@@ -28,27 +28,30 @@ class BellitaliaController extends Controller
   */
   public function store(Request $request)
   {
+    // dd($request->get('image'));
+    // dd($request);
+
     // Règles de validation :
+    // La règle image64 est une règle custom définie dans App\Providers\AppServiceProvider
     $rules = [
       'number' => 'numeric',
       'date' => 'required',
-      'image' => 'required|max:30000000',
+      'image' => 'required|max:30000000|image64:jpg,jpeg,png',
     ];
 
     // Messages d'erreur custom
-    // (même si normalement, vérif en front rendent impossible l'arrivée de lettres ici)
     $messages = [
       'number.numeric' => "Veuillez saisir un numéro de publication valide",
       'date.required' => "Vous devez saisir une date de publication",
       'image.required' => "Vous devez associer une couverture à cette publication",
       'image.max' => "L'image dépasse le poids autorisé (30Mo)",
+      'image.image64' => "L'image doit être au format jpg, jpeg ou png",
     ];
 
     // J'applique le Validator à toutes les requêtes envoyées.
     $validator = Validator::make($request->all(), $rules, $messages);
     // Si 1 des règles de validation n'est pas respectée
     if($validator->fails()){
-
       //code 400 : syntaxe requête erronée
       return response()->json($validator->errors(), 400);
     }

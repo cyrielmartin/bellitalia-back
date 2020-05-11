@@ -38,6 +38,8 @@ class InterestController extends Controller
   */
   public function store(Request $request)
   {
+
+    dd($request);
     // Règles de validation du formulaire :
     $rules = [
       'name' => 'required',
@@ -47,7 +49,7 @@ class InterestController extends Controller
       'region_id' => 'required',
       'bellitalia_id' => 'required',
       'tag_id' => 'required',
-      'image' => 'max:30000000',
+      'image' => 'max:30000000|image64:jpg,jpeg,png',
     ];
 
     // Messages d'erreur custom
@@ -59,7 +61,8 @@ class InterestController extends Controller
       'region_id.required' => "Veuillez sélectionner une région",
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
-      'image.file' => "L'image dépasse le poids autorisé (30Mo)",
+      'image.max' => "L'image dépasse le poids autorisé (30Mo)",
+      'image.image64' => "L'image doit être au format jpg, jpeg ou png"
     ];
 
     // J'applique le Validator à toutes les requêtes envoyées.
@@ -71,8 +74,7 @@ class InterestController extends Controller
     }
 
     $data = $request->all();
-
-// Si une image est envoyée
+    // Si une image est envoyée
     if($request->get('image'))
     {
       // On la renomme et on la stocke
