@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateBellitaliasTable extends Migration
+class CreateImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class UpdateBellitaliasTable extends Migration
      */
     public function up()
     {
-      Schema::table('bellitalias', function (Blueprint $table) {
-          $table->string('image')->nullable();
-      });
+        Schema::create('images', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -25,8 +26,6 @@ class UpdateBellitaliasTable extends Migration
      */
     public function down()
     {
-      Schema::table('bellitalias', function (Blueprint $table) {
-          $table->dropColumn('image');
-      });
+        Schema::dropIfExists('images');
     }
 }

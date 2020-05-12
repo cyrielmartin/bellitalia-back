@@ -17,7 +17,7 @@ class CreateInterestsTable extends Migration {
 			$table->decimal('latitude', 10,8);
 			$table->decimal('longitude', 11,8);
 			$table->integer('city_id')->unsigned();
-			$table->integer('bellitalia_id')->unsigned()->nullable();
+			$table->integer('bellitalia_id')->unsigned();
 		});
 	}
 

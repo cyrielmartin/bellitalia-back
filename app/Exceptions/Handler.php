@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
       // En faisant la procédure classique, impossible de récupérer l'erreur en front
       // return response('File too large!', 422);
       // Alors j'ai fait ça :
-      return back()->withErrors();
+      return back()->withErrors('Server error');
     }
     return parent::render($request, $exception);
   }

@@ -13,6 +13,7 @@ class CreateBellitaliasTable extends Migration {
 			$table->softDeletes();
 			$table->integer('number')->unsigned();
 			$table->datetime('publication');
+			$table->string('image');
 		});
 	}
 

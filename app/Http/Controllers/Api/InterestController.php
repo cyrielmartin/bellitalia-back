@@ -38,8 +38,6 @@ class InterestController extends Controller
   */
   public function store(Request $request)
   {
-
-    dd($request);
     // Règles de validation du formulaire :
     $rules = [
       'name' => 'required',
