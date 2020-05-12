@@ -28,9 +28,6 @@ class BellitaliaController extends Controller
   */
   public function store(Request $request)
   {
-    // dd($request->get('image'));
-    // dd($request);
-
     // Règles de validation :
     // La règle image64 est une règle custom définie dans App\Providers\AppServiceProvider
     $rules = [
