@@ -11,7 +11,7 @@ class CreateTagsTable extends Migration {
 			$table->increments('id');
 			$table->timestamps();
 			$table->softDeletes();
-			$table->enum('name', array(''))->nullable();
+			$table->string('name');
 		});
 	}
 

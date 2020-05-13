@@ -11,6 +11,7 @@ use App\City;
 use App\Region;
 use App\Bellitalia;
 use App\Tag;
+use App\Image;
 
 //Controller exclusivement dédié à l'Api
 
@@ -72,22 +73,10 @@ class InterestController extends Controller
     }
 
     $data = $request->all();
-    // Si une image est envoyée
-    if($request->get('image'))
-    {
-      // On la renomme et on la stocke
-      $image = $request->get('image');
-      $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
-      \Image::make($request->get('image'))->save('./assets/interests/'. $name);
 
-      // On stocke l'URL vers l'image
-      $imagePath = url('/assets/interests/'.$name);
-      $data['image'] = $imagePath;
-    }
     // Enregistrement et association des régions et des villes nouvelles
     if(isset($data['city_id']['name'])) {
       if(isset($data['region_id']['name'])){
-
         $region = Region::firstOrCreate(array("name" => $data['region_id']['name']));
         $data['region_id'] = $region->id;
 
@@ -119,6 +108,28 @@ class InterestController extends Controller
       // Une fois que tout ça est fait, on peut enregistrer l'Interest en base.
       $interest = new Interest($data);
       $interest->save();
+
+      // Si au moins une image lui a été associée :
+      if($request->get('image'))
+      {
+        // Je récupère les images envoyées
+        $imageArray = $request->get('image');
+        // Pour chacune d'entre elles :
+        foreach ($imageArray as $key => $oneImage) {
+          // On la renomme en évitant toute possibilité de doublons :
+          // Nom du point d'intérêt + index + date + heure
+          // On fait bien attention de "nettoyer" le nom du point d'intérêt pour éviter tout pb dans la base :
+          // Pas d'espace, en minuscule, pas d'accent ou de caractères spéciaux (s'il y en a, la lettre est supprimée)
+          $name = trim(mb_strtolower(preg_replace("/[^A-Za-z0-9]/", '', $interest->name))).$key.'-'.date("Ymd-His", strtotime('+2 hours')).'.' . explode('/', explode(':', substr($oneImage, 0, strpos($oneImage, ';')))[1])[1];
+          \Image::make($oneImage)->save('./assets/interests/'. $name);
+
+          // On stocke l'URL vers l'image associée au point d'intérêt
+          $imagePath = url('/assets/interests/'.$name);
+          $interest->images()->create([
+            'url' => $imagePath,
+          ]);
+        }
+      }
       // Et on n'oublie pas d'associer les catégories à l'intérêt qui vient d'être créé
       // (uniquement si au moins 1 tag a été ajouté)
       if(isset($tags)) {
