@@ -6,6 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\City as CityResource;
 use App\Http\Resources\Bellitalia as BellitaliaResource;
 use App\Http\Resources\Tag as TagResource;
+use App\Http\Resources\Image as ImageResource;
 
 
 class Interest extends JsonResource
@@ -25,10 +26,10 @@ class Interest extends JsonResource
       'link' => $this->link,
       'latitude' => $this->latitude,
       'longitude' => $this->longitude,
-      'image' => $this->image,
       'city' => new CityResource($this->city),
       'bellitalia' => new BellitaliaResource($this->bellitalia),
       'tags' => TagResource::collection($this->tags),
+      'images' => ImageResource::collection($this->images),
     ];
   }
 

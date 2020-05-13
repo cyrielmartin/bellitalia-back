@@ -13,8 +13,8 @@ class Image extends Model
   use SoftDeletes;
 
   protected $dates = ['deleted_at'];
-  protected $fillable = array('url', 'interest_id');
-  protected $visible = array('url', 'interest_id');
+  protected $fillable = array('url');
+  protected $visible = array('url');
 
   public function interest()
   {
