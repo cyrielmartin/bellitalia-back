@@ -179,7 +179,7 @@ class InterestController extends Controller
       'region_id' => 'required',
       'bellitalia_id' => 'required',
       'tag_id' => 'required',
-      'image' => 'max:30000000',
+      'image' => 'max:30000000|image64:jpg,jpeg,png',
     ];
 
     // Messages d'erreur custom
@@ -191,7 +191,8 @@ class InterestController extends Controller
       'region_id.required' => "Veuillez sélectionner une région",
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
-      'image.file' => "L'image dépasse le poids autorisé (30Mo)",
+      'image.max' => "L'image dépasse le poids autorisé (30Mo)",
+      'image.image64' => "L'image doit être au format jpg, jpeg ou png"
     ];
 
     // J'applique le Validator à toutes les requêtes envoyées.
@@ -205,24 +206,24 @@ class InterestController extends Controller
     // Bonne pratique : on ne modifie pas directement la requête.
     $data = $request->all();
 
-    // Si une image est envoyée
-    if($request->get('image'))
-
-    // On vérifie que l'image envoyée n'est pas déjà celle en base.
-    // On ne traite l'image envoyée que si ce n'est pas le cas
-    // Au final, on ne rentre dans cette condition que si l'image envoyée est nouvelle
-    if($interest->image != $data['image']) {
-      {
-        // On la renomme
-        $image = $request->get('image');
-        $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
-        \Image::make($request->get('image'))->save('./assets/interests/'. $name);
-
-        // On stocke l'URL vers l'image
-        $imagePath = url('/assets/interests/'.$name);
-        $data['image'] = $imagePath;
-      }
-    }
+    // // Si une image est envoyée
+    // if($request->get('image'))
+    //
+    // // On vérifie que l'image envoyée n'est pas déjà celle en base.
+    // // On ne traite l'image envoyée que si ce n'est pas le cas
+    // // Au final, on ne rentre dans cette condition que si l'image envoyée est nouvelle
+    // if($interest->image != $data['image']) {
+    //   {
+    //     // On la renomme
+    //     $image = $request->get('image');
+    //     $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
+    //     \Image::make($request->get('image'))->save('./assets/interests/'. $name);
+    //
+    //     // On stocke l'URL vers l'image
+    //     $imagePath = url('/assets/interests/'.$name);
+    //     $data['image'] = $imagePath;
+    //   }
+    // }
 
     // Enregistrement et association des régions et des villes nouvelles
     if(isset($data['city_id']['name'])) {
@@ -258,6 +259,29 @@ class InterestController extends Controller
 
       // Une fois que tout ça est fait, on peut enregistrer l'Interest en base.
       $interest->update($data);
+
+      // Si au moins une image lui a été associée :
+      if($request->get('image'))
+      {
+        // Je récupère les images envoyées
+        $imageArray = $request->get('image');
+        // Pour chacune d'entre elles :
+        foreach ($imageArray as $key => $oneImage) {
+          // On la renomme en évitant toute possibilité de doublons :
+          // Nom du point d'intérêt + index + date + heure
+          // On fait bien attention de "nettoyer" le nom du point d'intérêt pour éviter tout pb dans la base :
+          // Pas d'espace, en minuscule, pas d'accent ou de caractères spéciaux (s'il y en a, la lettre est supprimée)
+          $name = trim(mb_strtolower(preg_replace("/[^A-Za-z0-9]/", '', $interest->name))).$key.'-'.date("Ymd-His", strtotime('+2 hours')).'.' . explode('/', explode(':', substr($oneImage, 0, strpos($oneImage, ';')))[1])[1];
+          \Image::make($oneImage)->save('./assets/interests/'. $name);
+
+          // On stocke l'URL vers l'image associée au point d'intérêt
+          $imagePath = url('/assets/interests/'.$name);
+          $interest->images()->create([
+            'url' => $imagePath,
+          ]);
+        }
+      }
+
       // Et on n'oublie pas d'associer les catégories à l'intérêt qui vient d'être créé
       // Si aucun tag n'est envoyé, on envoie un tableau vide
       if(isset($tags)) {
