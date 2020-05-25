@@ -54,18 +54,32 @@ class BellitaliaController extends Controller
     }
     // Récupération requête
     $data = $request->all();
-
     // Si une image est envoyée
     if($request->get('image'))
     {
       // On la renomme et on la stocke
-      $image = $request->get('image');
-      $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
-      \Image::make($request->get('image'))->save('./assets/publications/'. $name);
+      $imageArray = $request->get('image');
+      // Même s'il n'y a qu'une image envoyée, elle est stockée dans un tableau, donc foreach nécessaire
+      foreach ($imageArray as $key => $oneImage) {
+        // On la renomme en évitant toute possibilité de doublons :
+        // Nom du point d'intérêt + index + date + heure
+        // On fait bien attention de "nettoyer" le nom du point d'intérêt pour éviter tout pb dans la base :
+        // Pas d'espace, en minuscule, pas d'accent ou de caractères spéciaux (s'il y en a, la lettre est supprimée)
+        $name = 'publication'.trim($data['number']).'-'.date("Ymd-His", strtotime('+2 hours')).'.' . explode('/', explode(':', substr($oneImage, 0, strpos($oneImage, ';')))[1])[1];
+        \Image::make($oneImage)->save('./assets/publications/'. $name);
 
-      // On stocke l'URL vers l'image
-      $imagePath = url('/assets/publications/'.$name);
-      $data['image'] = $imagePath;
+        // On stocke l'URL vers l'image associée au point d'intérêt
+        $imagePath = url('/assets/publications/'.$name);
+        $data['image'] = $imagePath;
+      }
+
+
+      // $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
+      // \Image::make($request->get('image'))->save('./assets/publications/'. $name);
+      //
+      // // On stocke l'URL vers l'image
+      // $imagePath = url('/assets/publications/'.$name);
+      // $data['image'] = $imagePath;
     }
 
     // Enregistrement du Bellitalia nouvellement créé
