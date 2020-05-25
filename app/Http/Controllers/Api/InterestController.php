@@ -236,31 +236,41 @@ class InterestController extends Controller
 
       // Une fois que tout ça est fait, on peut enregistrer l'Interest en base.
       $interest->update($data);
-      // Si au moins une image lui a été associée :
+
+      // Si au moins une image lui a été associé :
       if($request->get('image'))
       {
-        
+        // Je récupère les images envoyées
         $imageArray = $request->get('image');
-        // Pour chacune d'entre elles :
-        foreach ($imageArray as $key => $oneImage) {
-          // Si une ou plusieurs images sont déjà associées (et que la mise à jour n'y change rien), je mets à jour tel quel (sans passer le fichier par la moulinette)
-          if(substr( $oneImage, 0, 4 ) !== "http")
-          {
-            // On renomme en évitant toute possibilité de doublons :
-            // Nom du point d'intérêt + index + date + heure
-            // On fait bien attention de "nettoyer" le nom du point d'intérêt pour éviter tout pb dans la base :
-            // Pas d'espace, en minuscule, pas d'accent ou de caractères spéciaux (s'il y en a, la lettre est supprimée)
+
+        // Je récupère les images (url) déjà stockées en BDD
+        $storedUrl = $interest->images()->get('url')->all();
+
+        // Je les stocke dans un tableau
+        $storedUrlArray = array();
+        foreach ($storedUrl as $oneUrl) {
+          array_push($storedUrlArray, $oneUrl['url']);
+        }
+
+        // Si les images stockées ne correspondent pas à celles envoyées
+        if($imageArray !== $storedUrlArray) {
+
+          // Je supprime toutes les associations image-point d'intérêt
+          $interest->images()->delete();
+
+          // Et je stocke chacune des images envoyées comme dans le Store
+          foreach ($imageArray as $key => $oneImage) {
             $name = trim(mb_strtolower(preg_replace("/[^A-Za-z0-9]/", '', $interest->name))).$key.'-'.date("Ymd-His", strtotime('+2 hours')).'.' . explode('/', explode(':', substr($oneImage, 0, strpos($oneImage, ';')))[1])[1];
             \Image::make($oneImage)->save('./assets/interests/'. $name);
 
             // On stocke l'URL vers l'image associée au point d'intérêt
             $imagePath = url('/assets/interests/'.$name);
-            // $interest->images()->delete();
             $interest->images()->create([
               'url' => $imagePath,
             ]);
           }
         }
+        // Si aucune image n'est envoyé, je supprime toutes les associations images-points d'intérêt
       } else {
         $interest->images()->delete();
       }
