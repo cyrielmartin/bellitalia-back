@@ -270,7 +270,7 @@ class InterestController extends Controller
             ]);
           }
         }
-        // Si aucune image n'est envoyé, je supprime toutes les associations images-points d'intérêt
+        // Si aucune image n'est envoyée, je supprime toutes les associations images-points d'intérêt
       } else {
         $interest->images()->delete();
       }
