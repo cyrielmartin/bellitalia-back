@@ -20,8 +20,5 @@ class Supplement extends Model
   {
       return $this->belongsTo('App\BellItalia');
   }
-  public function supplements()
-  {
-      return $this->hasMany('App\Supplement');
-  }
+
 }

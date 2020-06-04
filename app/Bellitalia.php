@@ -21,5 +21,9 @@ class Bellitalia extends Model
     {
         return $this->hasMany('App\Interest', 'bellitalia_id');
     }
+    public function supplements()
+    {
+        return $this->hasMany('App\Supplement');
+    }
 
 }
