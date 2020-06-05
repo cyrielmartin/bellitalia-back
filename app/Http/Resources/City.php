@@ -18,7 +18,11 @@ class City extends JsonResource
       return [
         'id' => $this->id,
         'name' => $this->name,
-        'region_id' => new RegionResource($this->region),
+        'region' => new RegionResource($this->region),
       ];
+    }
+    public function withResponse($request, $response)
+    {
+      $response->header('X-Value', 'True');
     }
 }

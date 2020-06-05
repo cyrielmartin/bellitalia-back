@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Region extends Model 
+class Region extends Model
 {
 
     protected $table = 'regions';
@@ -15,7 +15,7 @@ class Region extends Model
 
     protected $dates = ['deleted_at'];
     protected $fillable = array('name');
-    protected $visible = array('name');
+    protected $visible = array('name', 'id');
 
     public function cities()
     {
