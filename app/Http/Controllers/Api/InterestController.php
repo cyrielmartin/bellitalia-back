@@ -49,6 +49,7 @@ class InterestController extends Controller
       'bellitalia_id' => 'required',
       'tag_id' => 'required',
       'image' => 'max:30000000|image64:jpg,jpeg,png',
+      'address' => 'required'
     ];
 
     // Messages d'erreur custom
@@ -61,7 +62,8 @@ class InterestController extends Controller
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
       'image.max' => "L'image dépasse le poids autorisé (30Mo)",
-      'image.image64' => "L'image doit être au format jpg, jpeg ou png"
+      'image.image64' => "L'image doit être au format jpg, jpeg ou png",
+      'address.required' => "Veuillez saisir une adresse valide"
     ];
 
     // J'applique le Validator à toutes les requêtes envoyées.
@@ -179,6 +181,7 @@ class InterestController extends Controller
       'bellitalia_id' => 'required',
       'tag_id' => 'required',
       'image' => 'max:30000000|image64:jpg,jpeg,png',
+      'address' => 'required'
     ];
 
     // Messages d'erreur custom
@@ -191,7 +194,8 @@ class InterestController extends Controller
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
       'image.max' => "L'image dépasse le poids autorisé (30Mo)",
-      'image.image64' => "L'image doit être au format jpg, jpeg ou png"
+      'image.image64' => "L'image doit être au format jpg, jpeg ou png",
+      'address.required' => "Veuillez saisir une adresse valide"
     ];
 
     // J'applique le Validator à toutes les requêtes envoyées.

@@ -26,6 +26,7 @@ class Interest extends JsonResource
       'link' => $this->link,
       'latitude' => $this->latitude,
       'longitude' => $this->longitude,
+      'address' => $this->address,
       'city' => new CityResource($this->city),
       'bellitalia' => new BellitaliaResource($this->bellitalia),
       'tags' => TagResource::collection($this->tags),
