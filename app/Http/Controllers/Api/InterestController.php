@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use Validator;
 use App\Http\Resources\Interest as InterestResource;
 use App\Interest;
-use App\City;
 use App\Region;
 use App\Bellitalia;
 use App\Tag;
@@ -44,7 +43,6 @@ class InterestController extends Controller
       'name' => 'required',
       'latitude' => 'numeric',
       'longitude' => 'numeric',
-      'city_id' => 'required',
       'region_id' => 'required',
       'bellitalia_id' => 'required',
       'tag_id' => 'required',
@@ -57,7 +55,6 @@ class InterestController extends Controller
       'name.required' => "Veuillez saisir un nom",
       'latitude.numeric' => "Veuillez saisir une latitude valide",
       'longitude.numeric' => "Veuillez saisir une longitude valide",
-      'city_id.required' => "Veuillez saisir un nom de ville",
       'region_id.required' => "Veuillez sélectionner une région",
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
@@ -74,17 +71,6 @@ class InterestController extends Controller
       return response()->json($validator->errors(), 400);
     }
     $data = $request->all();
-
-    // Enregistrement et association des régions et des villes nouvelles
-    if(isset($data['city_id']['name'])) {
-      if(isset($data['region_id']['name'])){
-        $region = Region::firstOrCreate(array("name" => $data['region_id']['name']));
-        $data['region_id'] = $region->id;
-
-        $city = City::firstOrCreate(array("name" => $data['city_id']['name'], "region_id" => $region->id));
-        $data['city_id'] = $city->id;
-      }
-    }
 
     // Association du numéro de Bell'Italia
     if(isset($data['bellitalia_id'])) {
@@ -176,7 +162,6 @@ class InterestController extends Controller
       'name' => 'required',
       'latitude' => 'numeric',
       'longitude' => 'numeric',
-      'city_id' => 'required',
       'region_id' => 'required',
       'bellitalia_id' => 'required',
       'tag_id' => 'required',
@@ -189,13 +174,11 @@ class InterestController extends Controller
       'name.required' => "Veuillez saisir un nom d'intérêt",
       'latitude.numeric' => "Veuillez saisir une latitude valide",
       'longitude.numeric' => "Veuillez saisir une longitude valide",
-      'city_id.required' => "Veuillez saisir un nom de ville",
       'region_id.required' => "Veuillez sélectionner une région",
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
       'image.max' => "L'image dépasse le poids autorisé (30Mo)",
-      'image.image64' => "L'image doit être au format jpg, jpeg ou png",
-      'address.required' => "Veuillez saisir une adresse valide"
+      'image.image64' => "L'image doit être au format jpg, jpeg ou png"
     ];
 
     // J'applique le Validator à toutes les requêtes envoyées.
@@ -206,17 +189,6 @@ class InterestController extends Controller
       return response()->json($validator->errors(), 400);
     }
     $data = $request->all();
-    // Enregistrement et association des régions et des villes nouvelles
-    if(isset($data['city_id']['name'])) {
-      if(isset($data['region_id']['name'])){
-
-        $region = Region::firstOrCreate(array("name" => $data['region_id']['name']));
-        $data['region_id'] = $region->id;
-
-        $city = City::firstOrCreate(array("name" => $data['city_id']['name'], "region_id" => $region->id));
-        $data['city_id'] = $city->id;
-      }
-    }
 
     // Association du numéro de Bell'Italia
     if(isset($data['bellitalia_id'])) {

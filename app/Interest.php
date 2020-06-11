@@ -14,8 +14,8 @@ class Interest extends Model
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
-    protected $fillable = array('name', 'description', 'link', 'latitude', 'longitude', 'address', 'city_id', 'bellitalia_id');
-    protected $visible = array('name', 'description', 'link', 'latitude', 'longitude', 'address', 'city_id', 'bellitalia_id');
+    protected $fillable = array('name', 'description', 'link', 'latitude', 'longitude', 'address', 'bellitalia_id');
+    protected $visible = array('name', 'description', 'link', 'latitude', 'longitude', 'address', 'bellitalia_id');
 
     public function bellitalia()
     {
@@ -25,11 +25,6 @@ class Interest extends Model
     public function tags()
     {
         return $this->belongsToMany('App\Tag', 'interest_tag');
-    }
-
-    public function city()
-    {
-        return $this->belongsTo('App\City');
     }
 
     public function images()
