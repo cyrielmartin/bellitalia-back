@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use Validator;
 use App\Http\Resources\Interest as InterestResource;
 use App\Interest;
-use App\Region;
 use App\Bellitalia;
 use App\Tag;
 use App\Image;
@@ -43,7 +42,6 @@ class InterestController extends Controller
       'name' => 'required',
       'latitude' => 'numeric',
       'longitude' => 'numeric',
-      'region_id' => 'required',
       'bellitalia_id' => 'required',
       'tag_id' => 'required',
       'image' => 'max:30000000|image64:jpg,jpeg,png',
@@ -55,7 +53,6 @@ class InterestController extends Controller
       'name.required' => "Veuillez saisir un nom",
       'latitude.numeric' => "Veuillez saisir une latitude valide",
       'longitude.numeric' => "Veuillez saisir une longitude valide",
-      'region_id.required' => "Veuillez sélectionner une région",
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
       'image.max' => "L'image dépasse le poids autorisé (30Mo)",
@@ -162,7 +159,6 @@ class InterestController extends Controller
       'name' => 'required',
       'latitude' => 'numeric',
       'longitude' => 'numeric',
-      'region_id' => 'required',
       'bellitalia_id' => 'required',
       'tag_id' => 'required',
       'image' => 'max:30000000|image64:jpg,jpeg,png',
@@ -174,7 +170,6 @@ class InterestController extends Controller
       'name.required' => "Veuillez saisir un nom d'intérêt",
       'latitude.numeric' => "Veuillez saisir une latitude valide",
       'longitude.numeric' => "Veuillez saisir une longitude valide",
-      'region_id.required' => "Veuillez sélectionner une région",
       'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
       'image.max' => "L'image dépasse le poids autorisé (30Mo)",

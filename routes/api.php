@@ -21,4 +21,3 @@ Route::apiResource('interest', 'Api\InterestController')->middleware('cors');
 Route::apiResource('region', 'Api\RegionController')->middleware('cors');
 Route::apiResource('tag', 'Api\TagController')->middleware('cors');
 Route::apiResource('bellitalia', 'Api\BellitaliaController')->middleware('cors');
-Route::apiResource('city', 'Api\CityController')->middleware('cors');

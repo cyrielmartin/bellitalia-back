@@ -17,9 +17,5 @@ class Region extends Model
     protected $fillable = array('name');
     protected $visible = array('name', 'id');
 
-    public function cities()
-    {
-        return $this->hasMany('App\City', 'region_id');
-    }
 
 }

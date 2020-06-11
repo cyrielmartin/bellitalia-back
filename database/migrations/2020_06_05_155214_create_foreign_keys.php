@@ -9,11 +9,6 @@ class CreateForeignKeys extends Migration {
 	public function up()
 	{
 		Schema::table('interests', function(Blueprint $table) {
-			$table->foreign('city_id')->references('id')->on('cities')
-						->onDelete('cascade')
-						->onUpdate('cascade');
-		});
-		Schema::table('interests', function(Blueprint $table) {
 			$table->foreign('bellitalia_id')->references('id')->on('bellitalias')
 						->onDelete('cascade')
 						->onUpdate('cascade');
@@ -25,11 +20,6 @@ class CreateForeignKeys extends Migration {
 		});
 		Schema::table('interest_tag', function(Blueprint $table) {
 			$table->foreign('interest_id')->references('id')->on('interests')
-						->onDelete('cascade')
-						->onUpdate('cascade');
-		});
-		Schema::table('cities', function(Blueprint $table) {
-			$table->foreign('region_id')->references('id')->on('regions')
 						->onDelete('cascade')
 						->onUpdate('cascade');
 		});
@@ -48,9 +38,6 @@ class CreateForeignKeys extends Migration {
 	public function down()
 	{
 		Schema::table('interests', function(Blueprint $table) {
-			$table->dropForeign('interests_city_id_foreign');
-		});
-		Schema::table('interests', function(Blueprint $table) {
 			$table->dropForeign('interests_bellitalia_id_foreign');
 		});
 		Schema::table('interest_tag', function(Blueprint $table) {
@@ -58,9 +45,6 @@ class CreateForeignKeys extends Migration {
 		});
 		Schema::table('interest_tag', function(Blueprint $table) {
 			$table->dropForeign('interest_tag_interest_id_foreign');
-		});
-		Schema::table('cities', function(Blueprint $table) {
-			$table->dropForeign('cities_region_id_foreign');
 		});
 		Schema::table('images', function(Blueprint $table) {
 			$table->dropForeign('images_interest_id_foreign');
