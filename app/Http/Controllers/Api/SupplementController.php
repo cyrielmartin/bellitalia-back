@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Supplement;
+use App\Http\Resources\Supplement as SupplementResource;
+use App\BellItalia;
 use Validator;
 
 class SupplementController extends Controller
@@ -54,48 +56,51 @@ class SupplementController extends Controller
     }
     // Récupération requête
     $data = $request->all();
-    dd($data);
+    // dd($data);
     // Si une image est envoyée
-    // if($request->get('image'))
-    // {
-    //   // On la renomme et on la stocke
-    //   $imageArray = $request->get('image');
-    //   // Même s'il n'y a qu'une image envoyée, elle est stockée dans un tableau, donc foreach nécessaire
-    //   foreach ($imageArray as $key => $oneImage) {
-    //     // On la renomme en évitant toute possibilité de doublons :
-    //     // Nom du point d'intérêt + index + date + heure
-    //     // On fait bien attention de "nettoyer" le nom du point d'intérêt pour éviter tout pb dans la base :
-    //     // Pas d'espace, en minuscule, pas d'accent ou de caractères spéciaux (s'il y en a, la lettre est supprimée)
-    //     $name = 'publication'.trim($data['number']).'-'.date("Ymd-His", strtotime('+2 hours')).'.' . explode('/', explode(':', substr($oneImage, 0, strpos($oneImage, ';')))[1])[1];
-    //     \Image::make($oneImage)->save('./assets/publications/'. $name);
-    //
-    //     // On stocke l'URL vers l'image associée au point d'intérêt
-    //     $imagePath = url('/assets/publications/'.$name);
-    //     $data['image'] = $imagePath;
-    //   }
+    if($request->get('image'))
+    {
+      // On la renomme et on la stocke
+      $imageArray = $request->get('image');
+      // Même s'il n'y a qu'une image envoyée, elle est stockée dans un tableau, donc foreach nécessaire
+      foreach ($imageArray as $key => $oneImage) {
+        // On la renomme en évitant toute possibilité de doublons :
+        // Nom du point d'intérêt + index + date + heure
+        // On fait bien attention de "nettoyer" le nom du point d'intérêt pour éviter tout pb dans la base :
+        // Pas d'espace, en minuscule, pas d'accent ou de caractères spéciaux (s'il y en a, la lettre est supprimée)
+        $name = 'supplement'.trim($data['name']).'-'.date("Ymd-His", strtotime('+2 hours')).'.' . explode('/', explode(':', substr($oneImage, 0, strpos($oneImage, ';')))[1])[1];
+        \Image::make($oneImage)->save('./assets/supplements/'. $name);
 
+        // On stocke l'URL vers l'image associée au point d'intérêt
+        $imagePath = url('/assets/supplements/'.$name);
+        $data['image'] = $imagePath;
+      }
 
-      // $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
-      // \Image::make($request->get('image'))->save('./assets/publications/'. $name);
-      //
-      // // On stocke l'URL vers l'image
-      // $imagePath = url('/assets/publications/'.$name);
-      // $data['image'] = $imagePath;
-    // }
+      // Association du numéro de Bell'Italia
+      if(isset($data['publication']['number'])) {
+        $bellitalia = BellItalia::firstOrCreate(array("number" => $data['publication']['number']));
+        $data['bellitalia_id'] = $bellitalia->id;
+      }
 
-    // Enregistrement du Bellitalia nouvellement créé
-    // if (isset($data['number'])) {
-    //   if(isset($data['date'])) {
-    //     // Formattage de la date pour BDD :
-    //     // J'ajoute 1 jour (bizarrement, toutes les dates renvoyées par le front sont à J-1)
-    //     $date = $data['date'];
-    //     $formattedDate  = date('Y-m-d', strtotime($date . ' +1 day'));
-    //     //firstOrCreate pour éviter tout doublon accidentel
-    //     //(même si normalement doublons rendus impossibles par Vue Multiselect)
-    //     $bellitalia = BellItalia::firstOrCreate(array("number" => $data['number'], "publication" => $formattedDate, "image" => $imagePath));
-    //   }
-    // }
-    return response()->json($supplement, 201);
+      // Une fois que tout ça est fait, on peut enregistrer le supplément en base.
+      $supplement = new Supplement($data);
+      $supplement->save();
+
+      return response()->json($supplement, 201);
+
+    }
+  }
+
+  /**
+  * Affichage d'une ressource (GET)
+  *
+  * @param  int  $id
+  * @return \Illuminate\Http\Response
+  */
+  public function show($id)
+  {
+
+    return new SupplementResource(Supplement::FindOrFail($id));
 
   }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Bellitalia;
+use App\Http\Resources\Bellitalia as BellItaliaResource;
+
 use Validator;
 
 class BellitaliaController extends Controller
@@ -72,14 +74,6 @@ class BellitaliaController extends Controller
         $imagePath = url('/assets/publications/'.$name);
         $data['image'] = $imagePath;
       }
-
-
-      // $name = time().'.' . explode('/', explode(':', substr($image, 0, strpos($image, ';')))[1])[1];
-      // \Image::make($request->get('image'))->save('./assets/publications/'. $name);
-      //
-      // // On stocke l'URL vers l'image
-      // $imagePath = url('/assets/publications/'.$name);
-      // $data['image'] = $imagePath;
     }
 
     // Enregistrement du Bellitalia nouvellement créé
@@ -95,6 +89,19 @@ class BellitaliaController extends Controller
       }
     }
     return response()->json($bellitalia, 201);
+
+  }
+
+  /**
+  * Affichage d'une ressource (GET)
+  *
+  * @param  int  $id
+  * @return \Illuminate\Http\Response
+  */
+  public function show($id)
+  {
+
+    return new BellItaliaResource(BellItalia::FindOrFail($id));
 
   }
 }
