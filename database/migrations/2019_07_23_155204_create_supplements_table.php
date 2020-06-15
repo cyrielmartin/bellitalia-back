@@ -14,7 +14,7 @@ class CreateSupplementsTable extends Migration
   public function up()
   {
     Schema::create('supplements', function (Blueprint $table) {
-      $table->bigIncrements('id');
+      $table->increments('id');
       $table->timestamps();
       $table->softDeletes();
       $table->string('name', 50);

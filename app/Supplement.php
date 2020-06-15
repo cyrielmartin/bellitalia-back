@@ -20,5 +20,9 @@ class Supplement extends Model
   {
       return $this->belongsTo('App\BellItalia');
   }
+  public function interests()
+  {
+      return $this->hasMany('App\Interest');
+  }
 
 }

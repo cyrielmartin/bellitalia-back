@@ -26,7 +26,6 @@ class AppServiceProvider extends ServiceProvider
   {
     // Règles custom permettant de valider le type des images chargées en base 64
     Validator::extend('image64', function ($attribute, $value, $parameters, $validator) {
-
       // Le validator n'entre en action que si une photo est envoyée
       if(!empty($value)) {
         foreach ($value as $oneValue) {

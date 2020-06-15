@@ -8,6 +8,7 @@ use Validator;
 use App\Http\Resources\Interest as InterestResource;
 use App\Interest;
 use App\Bellitalia;
+use App\Supplement;
 use App\Tag;
 use App\Image;
 
@@ -42,7 +43,8 @@ class InterestController extends Controller
       'name' => 'required',
       'latitude' => 'numeric',
       'longitude' => 'numeric',
-      'bellitalia_id' => 'required',
+      'bellitalia_id' => 'required_without:supplement_id',
+      'supplement_id' => 'required_without:bellitalia_id',
       'tag_id' => 'required',
       'image' => 'max:30000000|image64:jpg,jpeg,png',
       'address' => 'required'
@@ -53,7 +55,8 @@ class InterestController extends Controller
       'name.required' => "Veuillez saisir un nom",
       'latitude.numeric' => "Veuillez saisir une latitude valide",
       'longitude.numeric' => "Veuillez saisir une longitude valide",
-      'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
+      'bellitalia_id.required_without' => "Veuillez définir un numéro de Bell'Italia ou un supplément",
+      'supplement_id.required_without' => "Veuillez définir un numéro de Bell'Italia ou un supplément",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
       'image.max' => "L'image dépasse le poids autorisé (30Mo)",
       'image.image64' => "L'image doit être au format jpg, jpeg ou png",
@@ -69,10 +72,20 @@ class InterestController extends Controller
     }
     $data = $request->all();
 
-    // Association du numéro de Bell'Italia
+    // Association du numéro de Bell'Italia, s'il est défini
     if(isset($data['bellitalia_id'])) {
       $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id']));
       $data['bellitalia_id'] = $bellitalia->id;
+    }
+
+    // Association avec le supplément, s'il est défini
+    if(isset($data['supplement_id'])) {
+      // Côté front, je suis obligé d'associer le numéro (et non l'id) de la publication à bellitalia_id.
+      // Pour enregistrer correctement l'interest, je dois donc récupérer l'id correspondant à ce numéro.
+      $bellitalia = BellItalia::firstOrCreate(array("number" => $data['supplement_id']['bellitalia_id']));
+      // Seulement ensuite, je peux enregistrer le supplément.
+      $supplement = Supplement::firstOrCreate(array("name" => $data['supplement_id']['name'], "bellitalia_id" => $bellitalia->id));
+      $data['supplement_id'] = $supplement->id;
     }
 
     // Association des tags (catégories)
@@ -159,7 +172,8 @@ class InterestController extends Controller
       'name' => 'required',
       'latitude' => 'numeric',
       'longitude' => 'numeric',
-      'bellitalia_id' => 'required',
+      'bellitalia_id' => 'required_without:supplement_id',
+      'supplement_id' => 'required_without:bellitalia_id',
       'tag_id' => 'required',
       'image' => 'max:30000000|image64:jpg,jpeg,png',
       'address' => 'required'
@@ -170,7 +184,8 @@ class InterestController extends Controller
       'name.required' => "Veuillez saisir un nom d'intérêt",
       'latitude.numeric' => "Veuillez saisir une latitude valide",
       'longitude.numeric' => "Veuillez saisir une longitude valide",
-      'bellitalia_id.required' => "Veuillez saisir un numéro de Bell'Italia",
+      'bellitalia_id.required_without' => "Veuillez définir un numéro de Bell'Italia ou un supplément",
+      'supplement_id.required_without' => "Veuillez définir un numéro de Bell'Italia ou un supplément",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
       'image.max' => "L'image dépasse le poids autorisé (30Mo)",
       'image.image64' => "L'image doit être au format jpg, jpeg ou png"
@@ -189,6 +204,16 @@ class InterestController extends Controller
     if(isset($data['bellitalia_id'])) {
       $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id']));
       $data['bellitalia_id'] = $bellitalia->id;
+    }
+
+    // Association avec le supplément, s'il est défini
+    if(isset($data['supplement_id'])) {
+      // Côté front, je suis obligé d'associer le numéro (et non l'id) de la publication à bellitalia_id.
+      // Pour enregistrer correctement l'interest, je dois donc récupérer l'id correspondant à ce numéro.
+      $bellitalia = BellItalia::firstOrCreate(array("number" => $data['supplement_id']['bellitalia_id']));
+      // Seulement ensuite, je peux enregistrer le supplément.
+      $supplement = Supplement::firstOrCreate(array("name" => $data['supplement_id']['name'], "bellitalia_id" => $bellitalia->id));
+      $data['supplement_id'] = $supplement->id;
     }
 
     // Association des tags (catégories)

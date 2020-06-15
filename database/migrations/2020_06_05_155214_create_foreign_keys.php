@@ -8,6 +8,16 @@ class CreateForeignKeys extends Migration {
 
 	public function up()
 	{
+		Schema::table('supplements', function(Blueprint $table) {
+			$table->foreign('bellitalia_id')->references('id')->on('bellitalias')
+						->onDelete('cascade')
+						->onUpdate('cascade');
+		});
+		Schema::table('interests', function(Blueprint $table) {
+			$table->foreign('supplement_id')->references('id')->on('supplements')
+						->onDelete('cascade')
+						->onUpdate('cascade');
+		});
 		Schema::table('interests', function(Blueprint $table) {
 			$table->foreign('bellitalia_id')->references('id')->on('bellitalias')
 						->onDelete('cascade')
@@ -28,17 +38,15 @@ class CreateForeignKeys extends Migration {
 						->onDelete('cascade')
 						->onUpdate('cascade');
 		});
-		Schema::table('supplements', function(Blueprint $table) {
-			$table->foreign('bellitalia_id')->references('id')->on('bellitalias')
-						->onDelete('cascade')
-						->onUpdate('cascade');
-		});
 	}
 
 	public function down()
 	{
 		Schema::table('interests', function(Blueprint $table) {
 			$table->dropForeign('interests_bellitalia_id_foreign');
+		});
+		Schema::table('interests', function(Blueprint $table) {
+			$table->dropForeign('interests_supplement_id_foreign');
 		});
 		Schema::table('interest_tag', function(Blueprint $table) {
 			$table->dropForeign('interest_tag_tag_id_foreign');
