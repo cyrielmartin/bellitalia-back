@@ -18,7 +18,7 @@ class Supplement extends Model
 
   public function bellitalia()
   {
-      return $this->belongsTo('App\BellItalia');
+      return $this->belongsTo('App\BellItalia', 'bellitalia_id');
   }
   public function interests()
   {

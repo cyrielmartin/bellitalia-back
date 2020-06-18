@@ -14,7 +14,16 @@ class Supplement extends JsonResource
   */
   public function toArray($request)
   {
-    return parent::toArray($request);
+    return [
+      'id' => $this->id,
+      'name' => $this->name,
+      'image' => $this->image,
+      'bellitalia' => $this->bellitalia,
+    ];
   }
-  
+
+  public function withResponse($request, $response)
+  {
+    $response->header('X-Value', 'True');
+  }
 }

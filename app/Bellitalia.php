@@ -14,8 +14,8 @@ class Bellitalia extends Model
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
-    protected $fillable = array('number', 'publication', 'image');
-    protected $visible = array('number', 'publication', 'image');
+    protected $fillable = array('id', 'number', 'publication', 'image');
+    protected $visible = array('id', 'number', 'publication', 'image');
 
     public function interests()
     {
