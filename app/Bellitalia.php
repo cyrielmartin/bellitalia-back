@@ -23,7 +23,7 @@ class Bellitalia extends Model
     }
     public function supplements()
     {
-        return $this->hasMany('App\Supplement');
+        return $this->hasMany('App\Supplement', 'bellitalia_id');
     }
 
 }

@@ -74,7 +74,7 @@ class InterestController extends Controller
 
     // Association du numéro de Bell'Italia, s'il est défini
     if(isset($data['bellitalia_id'])) {
-      $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id']));
+      $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id']['number']));
       $data['bellitalia_id'] = $bellitalia->id;
     }
 
@@ -202,7 +202,7 @@ class InterestController extends Controller
 
     // Association du numéro de Bell'Italia
     if(isset($data['bellitalia_id'])) {
-      $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id']));
+      $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id']['number']));
       $data['bellitalia_id'] = $bellitalia->id;
     }
 
