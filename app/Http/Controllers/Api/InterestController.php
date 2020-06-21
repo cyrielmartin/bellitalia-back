@@ -77,16 +77,19 @@ class InterestController extends Controller
       $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id']['number']));
       $data['bellitalia_id'] = $bellitalia->id;
     }
-
     // Association avec le supplément, s'il est défini
-    if(isset($data['supplement_id'])) {
+    if(!empty($data['supplement_id'])) {
       // Côté front, je suis obligé d'associer le numéro (et non l'id) de la publication à bellitalia_id.
       // Pour enregistrer correctement l'interest, je dois donc récupérer l'id correspondant à ce numéro.
       $bellitalia = BellItalia::firstOrCreate(array("number" => $data['supplement_id']['bellitalia_id']));
       // Seulement ensuite, je peux enregistrer le supplément.
       $supplement = Supplement::firstOrCreate(array("name" => $data['supplement_id']['name'], "bellitalia_id" => $bellitalia->id));
       $data['supplement_id'] = $supplement->id;
+      // S'il n'y a pas de supplément, j'envoie du null sinon pb Array to String Conversion.
+    } else {
+      $data['supplement_id'] = null;
     }
+
 
     // Association des tags (catégories)
     if (isset($data['tag_id'])) {
