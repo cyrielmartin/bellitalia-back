@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Tag extends Model 
+class Tag extends Model
 {
 
     protected $table = 'tags';
@@ -14,8 +14,8 @@ class Tag extends Model
     use SoftDeletes;
 
     protected $dates = ['deleted_at'];
-    protected $fillable = array('name');
-    protected $visible = array('name');
+    protected $fillable = array('name', 'created_at');
+    protected $visible = array('name', 'created_at');
 
     public function interests()
     {
