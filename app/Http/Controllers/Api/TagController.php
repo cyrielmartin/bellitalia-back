@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Tag as TagResource;
 use Validator;
 use App\Tag;
 
@@ -19,8 +20,7 @@ class TagController extends Controller
   */
   public function index()
   {
-    // code 200 : succès de la requête
-    return response()->json(Tag::get(), 200);
+    return TagResource::collection(Tag::with(['interests'])->get());
   }
 
   /**

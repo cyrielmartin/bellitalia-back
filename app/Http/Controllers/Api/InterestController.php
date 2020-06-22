@@ -25,7 +25,9 @@ class InterestController extends Controller
   {
     // code 200 : succès de la requête
 
-    return InterestResource::collection(Interest::get());
+    return InterestResource::collection(Interest::with(['supplement'])->get());
+    // return TagResource::collection(Tag::with(['interests'])->get());
+
     // return response()->json(InterestResource::all(), 200);
   }
 

@@ -20,7 +20,11 @@ class Bellitalia extends JsonResource
       'number' => $this->number,
       'publication' => $this->publication,
       'image' => $this->image,
-      'supplements' => SupplementResource::collection($this->supplements),
+      // 'supplements' => SupplementResource::collection($this->supplements),
+      // 'bellitalia' => new BellitaliaResource($this->whenLoaded('bellitalia')),
+      'supplements' => SupplementResource::collection($this->whenLoaded('supplements')),
+
+
     ];
   }
 

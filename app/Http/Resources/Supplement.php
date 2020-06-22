@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-// use App\Http\Resources\Bellitalia as BellitaliaResource;
+use App\Http\Resources\Bellitalia as BellitaliaResource;
 
 class Supplement extends JsonResource
 {
@@ -18,7 +18,9 @@ class Supplement extends JsonResource
      return [
        'id' => $this->id,
        'name' => $this->name,
-       'bellitalia' => $this->bellitalia
+       'bellitalia' => new BellitaliaResource($this->bellitalia),
+
+
      ];
    }
 

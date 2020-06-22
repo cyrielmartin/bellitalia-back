@@ -20,6 +20,8 @@ class BellitaliaController extends Controller
   {
     // code 200 : succès de la requête
     return response()->json(Bellitalia::get(), 200);
+    // return BellItaliaResource::collection(Bellitalia::with(['supplements'])->get());
+
   }
 
   /**

@@ -18,8 +18,7 @@ class SupplementController extends Controller
   */
   public function index()
   {
-    // code 200 : succès de la requête
-    return response()->json(Supplement::get(), 200);
+    return SupplementResource::collection(Supplement::with(['bellitalia'])->get());
   }
 
   /**
@@ -56,7 +55,7 @@ class SupplementController extends Controller
     }
     // Récupération requête
     $data = $request->all();
-    // dd($data);
+
     // Si une image est envoyée
     if($request->get('image'))
     {

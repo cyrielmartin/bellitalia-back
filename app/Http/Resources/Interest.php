@@ -29,6 +29,7 @@ class Interest extends JsonResource
       'address' => $this->address,
       'bellitalia' => new BellitaliaResource($this->bellitalia),
       'supplement' => new SupplementResource($this->supplement),
+      // 'tags' => TagResource::collection($this->whenLoaded('tags')),
       'tags' => TagResource::collection($this->tags),
       'images' => ImageResource::collection($this->images),
     ];
