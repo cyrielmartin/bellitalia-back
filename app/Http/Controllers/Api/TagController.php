@@ -70,23 +70,10 @@ class TagController extends Controller
 
     // Récupération requête
     $data = $request->all();
-    dd($data);
-    // Enregistrement des tags (catégories) nouvellement créés
-    if (isset($data['tag_id'])) {
-      // Pour chacun des tags récupérés ici
-      foreach ($data['tag_id'] as $tag) {
-        // On formatte le tag comme la BDD l'attend : name : xxx
-        // On le stocke dans un tableau
-        $formattedTag = ["name" => $tag];
-        // On stocke chacun de ces tags en BDD
-        foreach ($formattedTag as $newTag) {
-          //firstOrCreate pour éviter tout doublon accidentel
-          //(même si normalement doublons rendus impossibles par Vue Multiselect)
-          Tag::firstOrCreate($newTag)->id;
-        }
-      }
-    }
 
+    if (isset($data['name'])) {
+      $tag->update($data);
+    }
     return response()->json($tag, 201);
 
   }
@@ -98,9 +85,7 @@ class TagController extends Controller
   */
   public function show($id)
   {
-
     return new TagResource(Tag::FindOrFail($id));
-
   }
 
 }
