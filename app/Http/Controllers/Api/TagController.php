@@ -68,6 +68,25 @@ class TagController extends Controller
       return response()->json(['message' => 'Tag Not found'], 404);
     }
 
+    // Règles de validation :
+    $rules = [
+      'name' => 'required',
+    ];
+
+    // Messages d'erreur custom
+    $messages = [
+      'name.required' => "Veuillez saisir un nom",
+    ];
+
+    // J'applique le Validator à toutes les requêtes envoyées.
+    $validator = Validator::make($request->all(), $rules, $messages);
+    // Si 1 des règles de validation n'est pas respectée
+    if($validator->fails()){
+      //code 400 : syntaxe requête erronée
+      return response()->json($validator->errors(), 400);
+    }
+
+
     // Récupération requête
     $data = $request->all();
 
