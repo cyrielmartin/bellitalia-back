@@ -88,4 +88,21 @@ class TagController extends Controller
     return new TagResource(Tag::FindOrFail($id));
   }
 
+  /**
+  * Suppression d'une ressource (DELETE)
+  *
+  * @param  int  $id
+  * @return \Illuminate\Http\Response
+  */
+  public function destroy($id)
+  {
+    $tag = Tag::findOrFail($id);
+    if(is_null($tag)){
+      return response()->json(['message' => 'Not found'], 404);
+    }
+    $tag->delete();
+    // Code 204 : succès requête mais aucune information à envoyer
+    return response()->json(null, 204);
+  }
+
 }
