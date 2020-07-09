@@ -51,6 +51,7 @@ class BellitaliaController extends Controller
 
     // J'applique le Validator à toutes les requêtes envoyées.
     $validator = Validator::make($request->all(), $rules, $messages);
+
     // Si 1 des règles de validation n'est pas respectée
     if($validator->fails()){
       //code 400 : syntaxe requête erronée
@@ -58,6 +59,7 @@ class BellitaliaController extends Controller
     }
     // Récupération requête
     $data = $request->all();
+
     // Si une image est envoyée
     if($request->get('image'))
     {

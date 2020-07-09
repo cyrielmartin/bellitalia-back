@@ -40,6 +40,7 @@ class InterestController extends Controller
   */
   public function store(Request $request)
   {
+
     // Règles de validation du formulaire :
     $rules = [
       'name' => 'required',
@@ -75,9 +76,11 @@ class InterestController extends Controller
     $data = $request->all();
 
     // Association du numéro de Bell'Italia, s'il est défini
-    if(isset($data['bellitalia_id'])) {
+    if(!empty($data['bellitalia_id'])) {
       $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id']['number']));
       $data['bellitalia_id'] = $bellitalia->id;
+    } else {
+      $data['bellitalia_id'] = null;
     }
     // Association avec le supplément, s'il est défini
     if(!empty($data['supplement_id'])) {
@@ -92,14 +95,13 @@ class InterestController extends Controller
       $data['supplement_id'] = null;
     }
 
-
     // Association des tags (catégories)
     if (isset($data['tag_id'])) {
       // Pour chacun des tags récupérés ici
       foreach ($data['tag_id'] as $tag) {
         // On formatte le tag comme la BDD l'attend : name : xxx
         // On le stocke dans un tableau
-        $formattedTag = ["name" => $tag];
+        $formattedTag = ["name" => $tag['name']];
         // Stockage en BDD via un mass assignement :
         // envoi direct d'un tableau en BDD
         // attention, bien rendre fillable "name" dans model
@@ -204,21 +206,24 @@ class InterestController extends Controller
       return response()->json($validator->errors(), 400);
     }
     $data = $request->all();
-
     // Association du numéro de Bell'Italia
-    if(isset($data['bellitalia_id'])) {
+    if(!empty($data['bellitalia_id'])) {
       $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id']['number']));
       $data['bellitalia_id'] = $bellitalia->id;
+    } else {
+      $data['bellitalia_id'] = null;
     }
 
     // Association avec le supplément, s'il est défini
-    if(isset($data['supplement_id'])) {
+    if(!empty($data['supplement_id'])) {
       // Côté front, je suis obligé d'associer le numéro (et non l'id) de la publication à bellitalia_id.
       // Pour enregistrer correctement l'interest, je dois donc récupérer l'id correspondant à ce numéro.
       $bellitalia = BellItalia::firstOrCreate(array("number" => $data['supplement_id']['bellitalia_id']));
       // Seulement ensuite, je peux enregistrer le supplément.
       $supplement = Supplement::firstOrCreate(array("name" => $data['supplement_id']['name'], "bellitalia_id" => $bellitalia->id));
       $data['supplement_id'] = $supplement->id;
+    } else {
+      $data['supplement_id'] = null;
     }
 
     // Association des tags (catégories)
@@ -227,7 +232,8 @@ class InterestController extends Controller
       foreach ($data['tag_id'] as $tag) {
         // On formatte le tag comme la BDD l'attend : name : xxx
         // On le stocke dans un tableau
-        $formattedTag = ["name" => $tag];
+        $formattedTag = ["name" => $tag['name']];
+
         // Stockage en BDD via un mass assignement :
         // envoi direct d'un tableau en BDD
         // attention, bien rendre fillable "name" dans model
@@ -235,8 +241,16 @@ class InterestController extends Controller
         $tags[] = Tag::firstOrCreate($formattedTag)->id;
       }
 
-      // Une fois que tout ça est fait, on peut enregistrer l'Interest en base.
-      $interest->update($data);
+      // Une fois que tout ça est fait, on peut mettre à jour l'Interest en base.
+      // Pour une raison que j'ignore, je suis obligé de préciser chaque propriété qui doit être mise à jour, sinon 'error to string conversion'
+      // Du coup, j'en profite pour ne pas remettre à jour les champs adresse, latitude et longitude -> sécurité supplémentaire 
+      $interest->update([
+        'name' => $data['name'],
+        'description' => $data['description'],
+        'link' => $data['link'],
+        'bellitalia_id' => $data['bellitalia_id'],
+        'supplement_id' => $data['supplement_id'],
+      ]);
 
       // Si au moins une image lui a été associé :
       if($request->get('image'))
