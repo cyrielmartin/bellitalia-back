@@ -34,7 +34,7 @@ class SupplementController extends Controller
     $rules = [
       'name' => 'required',
       'publication' => 'required',
-      'image' => 'required|max:30000000|image64:jpg,jpeg,png',
+      'image' => 'required|max:5000000|image64:jpg,jpeg,png',
     ];
 
     // Messages d'erreur custom
@@ -42,7 +42,7 @@ class SupplementController extends Controller
       'name.required' => "Vous devez donner un nom au supplément",
       'publication.required' => "Vous devez associer le supplément à un numéro de Bell'Italia",
       'image.required' => "Vous devez associer une couverture au supplément",
-      'image.max' => "L'image dépasse le poids autorisé (30Mo)",
+      'image.max' => "L'image dépasse le poids autorisé (5Mo)",
       'image.image64' => "L'image doit être au format jpg, jpeg ou png",
     ];
 

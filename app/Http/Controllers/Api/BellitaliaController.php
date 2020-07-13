@@ -37,7 +37,7 @@ class BellitaliaController extends Controller
     $rules = [
       'number' => 'numeric',
       'date' => 'required',
-      'image' => 'required|max:30000000|image64:jpg,jpeg,png',
+      'image' => 'required|max:5000000|image64:jpg,jpeg,png',
     ];
 
     // Messages d'erreur custom
@@ -45,7 +45,7 @@ class BellitaliaController extends Controller
       'number.numeric' => "Veuillez saisir un numéro de publication valide",
       'date.required' => "Vous devez saisir une date de publication",
       'image.required' => "Vous devez associer une couverture à cette publication",
-      'image.max' => "L'image dépasse le poids autorisé (30Mo)",
+      'image.max' => "L'image dépasse le poids autorisé (5Mo)",
       'image.image64' => "L'image doit être au format jpg, jpeg ou png",
     ];
 

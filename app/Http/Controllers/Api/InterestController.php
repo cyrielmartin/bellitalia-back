@@ -49,7 +49,7 @@ class InterestController extends Controller
       'bellitalia_id' => 'required_without:supplement_id',
       'supplement_id' => 'required_without:bellitalia_id',
       'tag_id' => 'required',
-      'image' => 'max:30000000|image64:jpg,jpeg,png',
+      'image' => 'max:5000000|image64:jpg,jpeg,png',
       'address' => 'required'
     ];
 
@@ -61,7 +61,7 @@ class InterestController extends Controller
       'bellitalia_id.required_without' => "Veuillez définir un numéro de Bell'Italia ou un supplément",
       'supplement_id.required_without' => "Veuillez définir un numéro de Bell'Italia ou un supplément",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
-      'image.max' => "L'image dépasse le poids autorisé (30Mo)",
+      'image.max' => "L'image dépasse le poids autorisé (5Mo)",
       'image.image64' => "L'image doit être au format jpg, jpeg ou png",
       'address.required' => "Veuillez saisir une adresse valide"
     ];
@@ -182,7 +182,7 @@ class InterestController extends Controller
       'bellitalia_id' => 'required_without:supplement_id',
       'supplement_id' => 'required_without:bellitalia_id',
       'tag_id' => 'required',
-      'image' => 'max:30000000|image64:jpg,jpeg,png',
+      'image' => 'max:5000000|image64:jpg,jpeg,png',
       'address' => 'required'
     ];
 
@@ -194,7 +194,7 @@ class InterestController extends Controller
       'bellitalia_id.required_without' => "Veuillez définir un numéro de Bell'Italia ou un supplément",
       'supplement_id.required_without' => "Veuillez définir un numéro de Bell'Italia ou un supplément",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
-      'image.max' => "L'image dépasse le poids autorisé (30Mo)",
+      'image.max' => "L'image dépasse le poids autorisé (5Mo)",
       'image.image64' => "L'image doit être au format jpg, jpeg ou png"
     ];
 
@@ -243,7 +243,7 @@ class InterestController extends Controller
 
       // Une fois que tout ça est fait, on peut mettre à jour l'Interest en base.
       // Pour une raison que j'ignore, je suis obligé de préciser chaque propriété qui doit être mise à jour, sinon 'error to string conversion'
-      // Du coup, j'en profite pour ne pas remettre à jour les champs adresse, latitude et longitude -> sécurité supplémentaire 
+      // Du coup, j'en profite pour ne pas remettre à jour les champs adresse, latitude et longitude -> sécurité supplémentaire
       $interest->update([
         'name' => $data['name'],
         'description' => $data['description'],
