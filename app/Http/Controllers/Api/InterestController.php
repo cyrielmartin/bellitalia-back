@@ -11,6 +11,7 @@ use App\Bellitalia;
 use App\Supplement;
 use App\Tag;
 use App\Image;
+// use \Gumlet\ImageResize;
 
 //Controller exclusivement dédié à l'Api
 
@@ -120,6 +121,16 @@ class InterestController extends Controller
         $imageArray = $request->get('image');
         // Pour chacune d'entre elles :
         foreach ($imageArray as $key => $oneImage) {
+          // Récupérer taille image initiale
+          // dd(strlen(base64_decode($oneImage)));
+
+          // WIP : réduction taille.
+          // Besoin d'intaller ImageResize mais pb de taille stockage dans composer
+          // https://stackoverflow.com/questions/49212475/composer-require-runs-out-of-memory-php-fatal-error-allowed-memory-size-of-161
+          // $image = ImageResize::createFromString(base64_decode($oneImage));
+          // $image->scale(50);
+          // $image->save('image.jpg');
+          // dd($image);
           // On la renomme en évitant toute possibilité de doublons :
           // Nom du point d'intérêt + index + date + heure
           // On fait bien attention de "nettoyer" le nom du point d'intérêt pour éviter tout pb dans la base :
