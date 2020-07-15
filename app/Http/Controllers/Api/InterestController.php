@@ -41,7 +41,7 @@ class InterestController extends Controller
   */
   public function store(Request $request)
   {
-
+dd('ici');
     // Règles de validation du formulaire :
     $rules = [
       'name' => 'required',
@@ -50,7 +50,7 @@ class InterestController extends Controller
       'bellitalia_id' => 'required_without:supplement_id',
       'supplement_id' => 'required_without:bellitalia_id',
       'tag_id' => 'required',
-      'image' => 'max:5000000|image64:jpg,jpeg,png',
+      'image' => 'max:50000000|image64:jpg,jpeg,png',
       'address' => 'required'
     ];
 
@@ -120,26 +120,35 @@ class InterestController extends Controller
         // Je récupère les images envoyées
         $imageArray = $request->get('image');
         // Pour chacune d'entre elles :
+        // dd($imageArray);
         foreach ($imageArray as $key => $oneImage) {
           // Récupérer taille image initiale
           // dd(strlen(base64_decode($oneImage)));
 
           // WIP : réduction taille.
-          // Besoin d'intaller ImageResize mais pb de taille stockage dans composer
-          // https://stackoverflow.com/questions/49212475/composer-require-runs-out-of-memory-php-fatal-error-allowed-memory-size-of-161
-          // $image = ImageResize::createFromString(base64_decode($oneImage));
-          // $image->scale(50);
-          // $image->save('image.jpg');
-          // dd($image);
+          $imageDataEncoded = base64_encode(file_get_contents($oneImage));
+          $imageData = base64_decode($imageDataEncoded);
+          $source = imagecreatefromstring($imageData);
+          $angle = 90;
+          $rotate = imagerotate($source, $angle, 0); // if want to rotate the image
+          $imageName = trim(mb_strtolower(preg_replace("/[^A-Za-z0-9]/", '', $interest->name))).$key.'-'.date("Ymd-His", strtotime('+2 hours')).'.' . explode('/', explode(':', substr($oneImage, 0, strpos($oneImage, ';')))[1])[1];
+          // dd($imageName);
+          // $target_file = './assets/interests/'. $imageName;
+          $quality = 50;
+          $imageSave = imagejpeg($rotate,'./assets/interests/'. $imageName,$quality);
+          // \Image::make(imagejpeg($rotate,$imageName,100))->save('./assets/interests/'. $imageName);
+
+          imagedestroy($source);
+
           // On la renomme en évitant toute possibilité de doublons :
           // Nom du point d'intérêt + index + date + heure
           // On fait bien attention de "nettoyer" le nom du point d'intérêt pour éviter tout pb dans la base :
           // Pas d'espace, en minuscule, pas d'accent ou de caractères spéciaux (s'il y en a, la lettre est supprimée)
-          $name = trim(mb_strtolower(preg_replace("/[^A-Za-z0-9]/", '', $interest->name))).$key.'-'.date("Ymd-His", strtotime('+2 hours')).'.' . explode('/', explode(':', substr($oneImage, 0, strpos($oneImage, ';')))[1])[1];
-          \Image::make($oneImage)->save('./assets/interests/'. $name);
+          // $name = trim(mb_strtolower(preg_replace("/[^A-Za-z0-9]/", '', $interest->name))).$key.'-'.date("Ymd-His", strtotime('+2 hours')).'.' . explode('/', explode(':', substr($oneImage, 0, strpos($oneImage, ';')))[1])[1];
+          // \Image::make($imageSave)->save('./assets/interests/'. $imageName);
 
           // On stocke l'URL vers l'image associée au point d'intérêt
-          $imagePath = url('/assets/interests/'.$name);
+          $imagePath = url('/assets/interests/'.$imageName);
           $interest->images()->create([
             'url' => $imagePath,
           ]);
