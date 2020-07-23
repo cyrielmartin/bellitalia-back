@@ -121,20 +121,18 @@ class InterestController extends Controller
         // Pour chacune d'entre elles :
         // dd($imageArray);
         foreach ($imageArray as $key => $oneImage) {
-          // Récupérer taille image initiale
-          // dd(strlen(base64_decode($oneImage)));
-          dd('WIP : réduction taille');
-          // WIP : réduction taille.
+          // Réduction taille images
+          // WIP : à affiner en fonction de la taille d'origine
           $imageDataEncoded = base64_encode(file_get_contents($oneImage));
           $imageData = base64_decode($imageDataEncoded);
           $source = imagecreatefromstring($imageData);
-          $angle = 90;
-          $rotate = imagerotate($source, $angle, 0); // if want to rotate the image
+          // $angle = 90;
+          // $rotate = imagerotate($source, $angle, 0); // if want to rotate the image
           $imageName = trim(mb_strtolower(preg_replace("/[^A-Za-z0-9]/", '', $interest->name))).$key.'-'.date("Ymd-His", strtotime('+2 hours')).'.' . explode('/', explode(':', substr($oneImage, 0, strpos($oneImage, ';')))[1])[1];
           // dd($imageName);
           // $target_file = './assets/interests/'. $imageName;
           $quality = 50;
-          $imageSave = imagejpeg($rotate,'./assets/interests/'. $imageName,$quality);
+          $imageSave = imagejpeg($source,'./assets/interests/'. $imageName,$quality);
           // \Image::make(imagejpeg($rotate,$imageName,100))->save('./assets/interests/'. $imageName);
 
           imagedestroy($source);
