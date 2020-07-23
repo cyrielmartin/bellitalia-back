@@ -41,7 +41,6 @@ class InterestController extends Controller
   */
   public function store(Request $request)
   {
-dd('ici');
     // Règles de validation du formulaire :
     $rules = [
       'name' => 'required',
@@ -124,7 +123,7 @@ dd('ici');
         foreach ($imageArray as $key => $oneImage) {
           // Récupérer taille image initiale
           // dd(strlen(base64_decode($oneImage)));
-
+          dd('WIP : réduction taille');
           // WIP : réduction taille.
           $imageDataEncoded = base64_encode(file_get_contents($oneImage));
           $imageData = base64_decode($imageDataEncoded);
