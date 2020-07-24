@@ -41,16 +41,20 @@ class InterestController extends Controller
   */
   public function store(Request $request)
   {
+
     // Règles de validation du formulaire :
     $rules = [
       'name' => 'required',
-      'latitude' => 'numeric',
-      'longitude' => 'numeric',
-      'bellitalia_id' => 'required_without:supplement_id',
-      'supplement_id' => 'required_without:bellitalia_id',
-      'tag_id' => 'required',
-      'image' => 'max:50000000|image64:jpg,jpeg,png',
-      'address' => 'required'
+      // 'latitude' => 'numeric',
+      // 'longitude' => 'numeric',
+      // 'bellitalia_id' => 'required_without:supplement_id',
+      // 'supplement_id' => 'required_without:bellitalia_id',
+      // 'tag_id' => 'required',
+      // 'image' => 'max:50000000|image64:jpg,jpeg,png',
+      'images' => 'required',
+      'images.*' => 'max:1000',
+      // 'photo.*' => 'max:600'
+      // 'address' => 'required'
     ];
 
     // Messages d'erreur custom
@@ -61,8 +65,12 @@ class InterestController extends Controller
       'bellitalia_id.required_without' => "Veuillez définir un numéro de Bell'Italia ou un supplément",
       'supplement_id.required_without' => "Veuillez définir un numéro de Bell'Italia ou un supplément",
       'tag_id.required' => "Veuillez sélectionner au moins une catégorie",
-      'image.max' => "L'image dépasse le poids autorisé (5Mo)",
-      'image.image64' => "L'image doit être au format jpg, jpeg ou png",
+      // 'image.max' => "L'image dépasse le poids autorisé (5Mo)",
+      // 'image.image64' => "L'image doit être au format jpg, jpeg ou png",
+      // 'image.file' => "Le format de l'image est incorrect",
+      // 'image.image' => "Veuillez vérifier le format de l'image",
+      'photo.required' => "Image requise",
+      // 'photo.*.max' => "Trop lourde",
       'address.required' => "Veuillez saisir une adresse valide"
     ];
 
@@ -74,7 +82,7 @@ class InterestController extends Controller
       return response()->json($validator->errors(), 400);
     }
     $data = $request->all();
-
+    dd($data);
     // Association du numéro de Bell'Italia, s'il est défini
     if(!empty($data['bellitalia_id'])) {
       $bellitalia = BellItalia::firstOrCreate(array("number" => $data['bellitalia_id']['number']));
