@@ -116,11 +116,12 @@ class InterestController extends Controller
     $interest->save();
 
     // Si au moins une image lui a été associée :
-    if($request->get('image'))
+    // if($request->get('images'))
+    if(isset($data['images']) && !empty($data['images']) && $data['images'] != 'undefined')
     {
       // Je récupère les images envoyées
-      $imageArray = $request->get('image');
-dd($imageArray);
+      $imageArray = $data['images'];
+      dd($imageArray);
       // Pour chacune d'entre elles :
       // dd($imageArray);
       foreach ($imageArray as $key => $oneImage) {
