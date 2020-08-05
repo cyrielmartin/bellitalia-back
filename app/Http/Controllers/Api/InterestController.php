@@ -11,7 +11,6 @@ use App\Bellitalia;
 use App\Supplement;
 use App\Tag;
 use App\Image;
-// use \Gumlet\ImageResize;
 
 //Controller exclusivement dédié à l'Api
 
@@ -121,18 +120,36 @@ class InterestController extends Controller
     {
       // Je récupère les images envoyées
       $imageArray = $data['images'];
-      dd($imageArray);
+
       // Pour chacune d'entre elles :
       // dd($imageArray);
       foreach ($imageArray as $key => $oneImage) {
+
+$oneImageSize = filesize($oneImage);
+
+// if($oneImageSize <= 8000000 && $oneImageSize >= 6000000){
+//   dd('Entre 6Mo et 8MO');
+// } elseif ($oneImageSize < 6000000 && $oneImageSize >= 4000000) {
+//   dd('Entre 4Mo et 6MO');
+// } elseif ($oneImageSize < 4000000 && $oneImageSize >= 2000000) {
+//   dd('Entre 2Mo et 4MO');
+// } elseif ($oneImageSize < 2000000 && $oneImageSize >= 1000000) {
+//   dd('Entre 1Mo et 2MO');
+// } elseif ($oneImageSize < 1000000 && $oneImageSize >= 500000) {
+//   dd('Entre 500Ko et 1MO');
+// } elseif ($oneImageSize < 500000) {
+//   dd('En dessous de 500Ko');
+// }
         // Réduction taille images
         // WIP : à affiner en fonction de la taille d'origine
-        $imageDataEncoded = base64_encode(file_get_contents($oneImage));
-        $imageData = base64_decode($imageDataEncoded);
-        $source = imagecreatefromstring($imageData);
+        // $imageDataEncoded = base64_encode(file_get_contents($oneImage));
+        // $imageData = base64_decode($imageDataEncoded);
+        // $source = imagecreatefromstring($imageData);
+        $source = imagecreatefromjpeg($oneImage);
         // $angle = 90;
         // $rotate = imagerotate($source, $angle, 0); // if want to rotate the image
-        $imageName = trim(mb_strtolower(preg_replace("/[^A-Za-z0-9]/", '', $interest->name))).$key.'-'.date("Ymd-His", strtotime('+2 hours')).'.' . explode('/', explode(':', substr($oneImage, 0, strpos($oneImage, ';')))[1])[1];
+        // $imageName = trim(mb_strtolower(preg_replace("/[^A-Za-z0-9]/", '', $interest->name))).$key.'-'.date("Ymd-His", strtotime('+2 hours')).'.' . explode('/', explode(':', substr($oneImage, 0, strpos($oneImage, ';')))[1])[1];
+        $imageName = 'test';
         // dd($imageName);
         // $target_file = './assets/interests/'. $imageName;
         $quality = 50;
