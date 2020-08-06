@@ -98,8 +98,6 @@ class SupplementController extends Controller
   */
   public function show($id)
   {
-
     return new SupplementResource(Supplement::FindOrFail($id));
-
   }
 }
