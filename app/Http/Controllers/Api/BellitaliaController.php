@@ -33,20 +33,19 @@ class BellitaliaController extends Controller
   public function store(Request $request)
   {
     // Règles de validation :
-    // La règle image64 est une règle custom définie dans App\Providers\AppServiceProvider
     $rules = [
       'number' => 'numeric',
       'date' => 'required',
-      'image' => 'required|max:5000000|image64:jpg,jpeg,png',
+      'images.*' => 'required|max:40000000|image',
     ];
 
     // Messages d'erreur custom
     $messages = [
       'number.numeric' => "Veuillez saisir un numéro de publication valide",
       'date.required' => "Vous devez saisir une date de publication",
-      'image.required' => "Vous devez associer une couverture à cette publication",
-      'image.max' => "L'image dépasse le poids autorisé (5Mo)",
-      'image.image64' => "L'image doit être au format jpg, jpeg ou png",
+      'images.*.required' => "Vous devez associer une couverture à cette publication",
+      'images.*.image' => "L'image chargée n'a pas le bon format (jpg, jpeg ou png)",
+      'images.*.max' => "L'image chargée dépasse le poids autorisé (4Mo)",
     ];
 
     // J'applique le Validator à toutes les requêtes envoyées.
@@ -61,21 +60,37 @@ class BellitaliaController extends Controller
     $data = $request->all();
 
     // Si une image est envoyée
-    if($request->get('image'))
+    if(isset($data['images']) && !empty($data['images']) && $data['images'] != 'undefined')
     {
-      // On la renomme et on la stocke
-      $imageArray = $request->get('image');
+      // Je récupère l'image envoyée
+      $imageArray = $data['images'];
       // Même s'il n'y a qu'une image envoyée, elle est stockée dans un tableau, donc foreach nécessaire
       foreach ($imageArray as $key => $oneImage) {
-        // On la renomme en évitant toute possibilité de doublons :
-        // Nom du point d'intérêt + index + date + heure
-        // On fait bien attention de "nettoyer" le nom du point d'intérêt pour éviter tout pb dans la base :
-        // Pas d'espace, en minuscule, pas d'accent ou de caractères spéciaux (s'il y en a, la lettre est supprimée)
-        $name = 'publication'.trim($data['number']).'-'.date("Ymd-His", strtotime('+2 hours')).'.' . explode('/', explode(':', substr($oneImage, 0, strpos($oneImage, ';')))[1])[1];
-        \Image::make($oneImage)->save('./assets/publications/'. $name);
+
+        // Je récupère la taille de l'image
+        $oneImageSize = filesize($oneImage);
+
+        // Pour la réduction de taille, j'applique un pourcentage différent selon la taille d'origine
+        if($oneImageSize <= 4000000 && $oneImageSize >= 2000000) {
+          $quality = 70;
+        } elseif ($oneImageSize < 2000000 && $oneImageSize >= 1000000) {
+          $quality = 60;
+        } elseif ($oneImageSize < 1000000 && $oneImageSize >= 500000) {
+          $quality = 50;
+        } elseif ($oneImageSize < 500000) {
+          $quality = 30;
+        }
+
+        // On renomme ensuite l'image en évitant toute possibilité de doublons :
+        $imageName = 'publication'.trim($data['number']).'-'.date("Ymd-His", strtotime('+2 hours'));
+
+        // Quand tout ça est ok, on peut stocker l'image
+        $source = imagecreatefromjpeg($oneImage);
+        $imageSave = imagejpeg($source,'./assets/publications/'. $imageName,$quality);
+        imagedestroy($source);
 
         // On stocke l'URL vers l'image associée au point d'intérêt
-        $imagePath = url('/assets/publications/'.$name);
+        $imagePath = url('/assets/publications/'.$imageName);
         $data['image'] = $imagePath;
       }
     }

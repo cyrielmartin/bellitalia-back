@@ -35,7 +35,6 @@ class InterestController extends Controller
   */
   public function store(Request $request)
   {
-    dd('post');
     // Règles de validation du formulaire :
     $rules = [
       'name' => 'required',
@@ -82,12 +81,12 @@ class InterestController extends Controller
 
     // Association avec le supplément, s'il est défini
     if(isset($data['supplement_id']) && !empty($data['supplement_id']) && $data['supplement_id'] != 'undefined') {
-      // Côté front, je suis obligé d'associer le numéro (et non l'id) de la publication à bellitalia_id.
-      // Pour enregistrer correctement l'interest, je dois donc récupérer l'id correspondant à ce numéro.
-      $bellitalia = BellItalia::firstOrCreate(array("number" => $data['supplement_id']['bellitalia_id']));
-      // Seulement ensuite, je peux enregistrer le supplément.
-      $supplement = Supplement::firstOrCreate(array("name" => $data['supplement_id']['name'], "bellitalia_id" => $bellitalia->id));
+
+      // En front, j'ai envoyé le numéro du BellItalia correspondant juste pour pouvoir le récupérer ici (pour enregistrement supplément)
+      $supplement = Supplement::firstOrCreate(array("name" => $data['supplement_id'], "bellitalia_id" => $data['bellitalia_id']));
       $data['supplement_id'] = $supplement->id;
+      // Mais à peine je m'en suis servi que je remets le numéro du BI à null sinon double association publication/supplement. 
+      $data['bellitalia_id'] = null;
       // S'il n'y a pas de supplément, j'envoie du null sinon pb Array to String Conversion.
     } else {
       $data['supplement_id'] = null;
